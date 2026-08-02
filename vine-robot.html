@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soft vine robot for fibre installation - Thomas Green</title>
+<meta name="description" content="A soft growing robot that installs fibre-optic cable through congested buried ducting, taken from concept through field trials and into production.">
+<meta property="og:title" content="Soft vine robot for fibre installation - Thomas Green">
+<meta property="og:description" content="A soft growing robot that installs fibre-optic cable through congested buried ducting, taken from concept through field trials and into production.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/vine-robot.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="./">Thomas Green</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Soft robotics</p>
+  <h1>A soft robot that installs fibre through buried duct</h1>
+  <p class="lede">Laying fibre-optic cable into existing underground duct is
+    slow, and the ducts are rarely clear. We built a soft robot that everts
+    its way along them instead.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>Liberty Global, Technology &amp; Innovation</dd></div>
+    <div><dt>Role</dt><dd>Co-led ideation and prototyping</dd></div>
+    <div><dt>Period</dt><dd>2022 to 2024, Zurich</dd></div>
+    <div><dt>Status</dt><dd>Patent-pending, in production</dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+
+  <figure class="bleed">
+    <video src="assets/video/vine-congested.mp4"
+           poster="assets/video/vine-congested.jpg"
+           autoplay muted loop playsinline preload="metadata"
+           aria-label="A transparent duct laid across a depot floor with black cable already running through it. The soft robot advances inside the duct alongside the existing cable, with a cable drum in the background."></video>
+    <figcaption>Advancing along duct that already has cable in it, on a test
+      platform. Occupied duct is the normal case in a live network, and it is the worst case
+        for a pull, because every cable already in there is another surface to
+        drag against.</figcaption>
+  </figure>
+
+  <div class="media-row">
+    <figure>
+      <video src="assets/video/vine-bend.mp4"
+             poster="assets/video/vine-bend.jpg"
+             autoplay muted loop playsinline preload="metadata"
+             aria-label="Close view of a green ninety degree elbow joining lengths of transparent duct, with the soft robot working its way around the corner."></video>
+      <figcaption>Working around a 90&deg; elbow.</figcaption>
+    </figure>
+    <figure>
+      <video src="assets/video/vine-paperball.mp4"
+             poster="assets/video/vine-paperball.jpg"
+             autoplay muted loop playsinline preload="metadata"
+             aria-label="A crumpled paper ball sitting inside a transparent duct on the floor, pushed steadily along the bore as the robot advances behind it."></video>
+      <figcaption>Driving a loose blockage ahead of the tip rather than jamming
+        against it.</figcaption>
+    </figure>
+    <figure>
+      <video src="assets/video/vine-debris.mp4"
+             poster="assets/video/vine-debris.jpg"
+             autoplay muted loop playsinline preload="metadata"
+             aria-label="Ground-level view along a duct part-filled with compacted silt, with the robot carving a path through the deposit and pushing it aside against the duct wall."></video>
+      <figcaption>Carving through compacted silt, shifting it against the wall
+        instead of clearing it entirely.</figcaption>
+    </figure>
+  </div>
+
+  <div class="media-row">
+    <figure>
+      <video src="assets/video/vine-serpentine.mp4"
+             poster="assets/video/vine-serpentine.jpg"
+             autoplay muted loop playsinline preload="none"
+             aria-label="A long soft tube extending itself across a lawn, growing from its tip along a winding S-shaped path without being pushed or dragged."></video>
+      <figcaption>Following a winding path in the open, with nothing pushing
+        from behind.</figcaption>
+    </figure>
+    <figure>
+      <video src="assets/video/vine-vertical.mp4"
+             poster="assets/video/vine-vertical.jpg"
+             autoplay muted loop playsinline preload="none"
+             aria-label="The soft robot extending vertically upwards alongside a post, rising against gravity past trees."></video>
+      <figcaption>Extending vertically, where a pulled cable fights gravity
+        along its whole length.</figcaption>
+    </figure>
+  </div>
+
+  <figure class="bleed fig-svg">
+    <img src="assets/fig/vine-deployment.svg"
+         alt="Cross-section of a buried duct. A soft robot everts from an access chamber along the duct, past silt and partial blockages, towards a 90 degree bend into the next chamber. The fibre is drawn in behind the advancing tip." width="900" height="322">
+    <figcaption>Deployment in buried duct. The robot enters at one access
+      chamber and everts along to the next, drawing fibre in behind the
+      tip.</figcaption>
+  </figure>
+
+  <div class="stats">
+    <div><span class="v">4</span><span class="k">prototypes built in nine months</span></div>
+    <div><span class="v">200+ m</span><span class="k">traversed in a single run of live duct</span></div>
+    <div><span class="v">3</span><span class="k">operating companies now running it</span></div>
+  </div>
+</div>
+
+<div class="wrap prose">
+
+  <h2>The problem</h2>
+  <p>A telecoms group with a fibre rollout to deliver has a lot of duct already
+    in the ground, and reusing it is far cheaper than digging. The catch is that
+    nobody knows what is inside. Ducts laid decades ago silt up, partially
+    collapse, and take bends that a rigid rod will not follow. Conventional installation pushes or winches cable through. That needs pulling force at one end and tolerates very little friction, so it fails on the routes that are most expensive to dig up.</p>
+  <p>Every failed pull turns into an excavation, which is where the cost and the
+    delay are.</p>
+
+  <h2>Why a growing robot</h2>
+  <p>A vine robot avoids the friction problem because nothing slides. The body everts
+    from the tip, so the material already inside the duct stays where it is
+    while the tip extends forwards. Nothing drags along the duct wall, so the force needed does not climb with distance the way a pull does. The tip can also work its way past a partial blockage rather than jamming against it.</p>
+  <p>The behaviour is well established in research, but very little of that work
+    had been aimed at buried telecoms duct at the lengths a real route needs.</p>
+
+  <h2>What I did</h2>
+  <p>I co-led the idea from the start and ran the prototyping. Over roughly nine months we built four prototypes, 3D printed and machined in-house, each one answering the failure we had hit with the last. The early builds answered whether the robot would evert at all.
+    The later ones dealt with what makes it deployable: getting round
+      bends, dealing with debris, and retracting cleanly when a run has to be
+      abandoned.</p>
+  <p>Once it held up on the bench we took it into the field, into live duct
+    rather than a clean test rig. The best run covered more than 200 metres in
+    a single continuous traversal. We demonstrated the robot to the Group CTO, which secured the backing to take it further.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/vine-launcher.webp" loading="lazy"
+           alt="Cutaway render of the first launcher: a sealed cylindrical vessel sliced lengthwise, with a motor mounted on the end plate driving a shaft that carries a spool of tubing along the length of the vessel."
+           width="1600" height="900">
+      <figcaption>The first launcher, cut away along its axis. A motor on the
+        end plate drives the spool of tubing through a shaft, inside a sealed
+        cylindrical vessel.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/vine-launcher-v2-side.webp" loading="lazy"
+           alt="Cutaway render of the second launcher: a clear acrylic box with the near side panel removed, showing a tubing spool, a curved guide leading to an exit port on the right, and a stepper motor driving the spool."
+           width="1600" height="900">
+      <figcaption>The second, with the near panel removed. Laser-cut acrylic
+        rather than a turned vessel, with the tubing guided to a single exit
+        port and a stepper driving the spool.</figcaption>
+    </figure>
+  </div>
+
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/vine-launcher-parts.webp" loading="lazy"
+           alt="Laser-cut acrylic parts laid out on an MDF board, four blue side panels and four clear motor-mount frames, next to a stepper motor with its wiring loose."
+           width="768" height="1024">
+      <figcaption>Laser-cut acrylic parts and the stepper for the second
+        launcher, before assembly.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/vine-launcher-built.webp" loading="lazy"
+           alt="The second launcher in clear acrylic on a wooden deck: the stepper motor in its laser-cut mount, the blue spool discs behind it, and the clear exit tube at the front."
+           width="1152" height="1536">
+      <figcaption>The second launcher as built. The spool sits inside the
+        acrylic housing and the tubing leaves through a single exit
+        port.</figcaption>
+    </figure>
+  </div>
+
+  <figure class="bleed plain">
+    <img src="assets/img/vine-v2-clamps.webp" loading="lazy"
+         alt="The second prototype closed up: an acrylic lid held down by steel toggle clamps onto a vinyl-wrapped body carrying a Liberty Global logo and the label Vine Robot Prototype v2."
+         width="1024" height="768">
+    <figcaption>The second prototype as built. The lid seals against a gasket
+      under toggle clamps, which is what lets it be opened between runs and
+      still hold pressure.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/vine-field.webp"
+         alt="An access chamber outside a building with its concrete lid levered aside, a spade resting nearby, and an engineer leaning into the open pit. On the slab beside them sits the deployment unit with hoses and wiring running down into the duct." width="1150" height="908">
+    <figcaption>A live access chamber during the field trials. The duct being tested is the duct
+      already in the ground, in whatever state decades of service have left it.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Where it went</h2>
+  <p>Demand from the operating companies pushed it into productionisation, and
+    it now runs across three of them. A patent application covering the work
+    was filed by the company and is pending.</p>
+
+  <h2>What I would do differently</h2>
+  <p>We characterised the robot mostly by whether a run succeeded. That was the
+    right call for proving the concept quickly, but it left us short of the
+    instrumented data that would have made the design iterations faster and the
+    productionisation handover cleaner. If I ran it again I would build the
+    measurement in from the first prototype rather than the third.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('video[autoplay]').forEach(function (v) {
+    v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+  });
+}
+</script>
+</body>
+</html>

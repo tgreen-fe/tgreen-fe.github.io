@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detecting and counting apples in orchard imagery - Thomas Green</title>
+<meta name="description" content="Faster R-CNN and YOLO compared on the same orchard dataset for apple detection, counting and instance segmentation.">
+<meta property="og:title" content="Detecting and counting apples in orchard imagery - Thomas Green">
+<meta property="og:description" content="Faster R-CNN and YOLO compared on the same orchard dataset for apple detection, counting and instance segmentation.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/apple-vision.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="./">Thomas Green</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Machine vision</p>
+  <h1>Detecting and counting apples in orchard imagery</h1>
+  <p class="lede">Yield estimation from orchard imagery, treated as three
+    connected problems: find the apples, count them, and separate the ones
+    that are touching.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>Robotic Systems, MSc Robotics, Bristol</dd></div>
+    <div><dt>Role</dt><dd>Sole author</dd></div>
+    <div><dt>Approach</dt><dd>Faster R-CNN and YOLO, compared</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/tgreen-fe/apple-machine-vision">apple-machine-vision</a></dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/apple-results.webp"
+         alt="Top left: orchard image with green detection boxes around individual apples. Top middle: the same image with coloured instance segmentation masks. Top right: cropped examples of individual detected apples, including blurred, occluded and yellow fruit. Bottom: four source orchard images showing red and yellow varieties in varying light." width="1000" height="1097">
+    <figcaption>Detections, instance masks and individual crops from the same
+      orchard scene. The bottom row shows the variety in the source imagery:
+      two cultivars, different light, and a lot of fruit on the ground that
+      should not be counted as fruit on the tree.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Why it is not just detection</h2>
+  <p>A single apple is an easy detection target, but an orchard scene is much
+    harder. The difficulties are structural: fruit hangs in clusters where the boundary between two apples
+    is a soft edge rather than a hard one, foliage occludes most of the crop
+    most of the time, and the same variety photographs completely differently
+    depending on where the sun is. Windfall on the ground looks identical to
+    fruit on the tree and must not be counted.</p>
+  <p>Counting compounds this. Individually small detection errors accumulate into
+    the yield figure, so a model that looks respectable on a per-image metric
+    can still be well out on the total.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/apple-nb1.webp"
+         alt="Four panels: the original orchard image, its blurred LAB A channel where red fruit shows as bright blobs, its blurred B channel, and a colour-enhanced version of the original." width="989" height="394">
+    <figcaption>Working in LAB rather than RGB. The A channel separates red
+      fruit from foliage far more cleanly than any RGB combination does, which
+      made it a useful preprocessing step and a decent classical baseline to
+      measure the learned models against.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>What I built</h2>
+  <ul class="tick">
+    <li>Training and prediction pipelines for both Faster R-CNN and YOLO
+      against the same dataset, so the comparison is about the architecture
+      rather than the data handling.</li>
+    <li>A colour-space preprocessing stage in LAB, used both as an input
+      enhancement and as a non-learned baseline worth beating.</li>
+    <li>Separate evaluation for detection, counting and segmentation, because
+      they fail in different ways and a single mAP number hides that.</li>
+    <li>A conversion step from polygon annotations to instance masks, which was
+      most of the unglamorous work.</li>
+  </ul>
+
+  <h2>What it showed</h2>
+  <p>The two architectures trade off in the way the literature suggests, with
+    the single-stage detector faster and the two-stage one better on the small
+    and partially occluded fruit that make up the difficult tail of the
+    dataset. For yield estimation that tail is where most of the counting error comes from,
+      so accuracy is worth more here than throughput.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

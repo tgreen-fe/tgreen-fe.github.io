@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A low-cost radiation-mapping telerobot - Thomas Green</title>
+<meta name="description" content="A teleoperated rover carrying a georeferenced Geiger counter, built for £281, which traced a buried effluent pipeline that the most recent site survey had not documented.">
+<meta property="og:title" content="A low-cost radiation-mapping telerobot - Thomas Green">
+<meta property="og:description" content="A teleoperated rover carrying a georeferenced Geiger counter, built for £281, which traced a buried effluent pipeline that the most recent site survey had not documented.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/radiation-rover.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="./">Thomas Green</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Telerobotics &middot; Sensing</p>
+  <h1>A £281 rover for georeferenced radiation mapping</h1>
+  <p class="lede">Commercial radiation telerobots work well and are priced for national
+    laboratories. This one is a Raspberry Pi, a Geiger tube and a 3D-printed
+    chassis, and it picked up a buried pipeline that the most recent site
+    survey does not record.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>MEng Individual Project, Southampton</dd></div>
+    <div><dt>Role</dt><dd>Sole author, whole system</dd></div>
+    <div><dt>Period</dt><dd>2020 to 2022</dd></div>
+    <div><dt>Field sites</dt><dd>Chapelcross, Southampton</dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <div class="callout-wrap">
+      <img src="assets/img/rover-hardware.webp"
+           alt="Plan view of the rover powered up: four large green 3D-printed tyres on black printed suspension arms with blue anodised dampers, a lithium-polymer battery strapped over the chassis, a brushless motor and speed controller with cooling fan, and an inline current meter reading 0.07 amps." width="1520" height="1400">
+      <span class="callout l" style="left:36%; top:14%">3D-printed tyre</span>
+      <span class="callout r" style="left:23%; top:38%">ESC and fan</span>
+      <span class="callout r" style="left:26%; top:56%">Motor</span>
+      <span class="callout l" style="left:72%; top:42%">Battery</span>
+      <span class="callout l" style="left:80%; top:30%">Damper</span>
+    </div>
+    <figcaption>The rover under power. Largely 3D printed, built around the
+      open-source Tarmo radio-control chassis design, carrying the detachable
+      sensor unit, a Raspberry Pi, GPS, camera and battery.</figcaption>
+  </figure>
+
+  <div class="stats">
+    <div><span class="v">35&ndash;52%</span><span class="k">elevation in count rate along the buried pipeline</span></div>
+    <div><span class="v">£281</span><span class="k">total build cost, against a £350 budget</span></div>
+    <div><span class="v">28%</span><span class="k">of the cost of the commercial equivalent</span></div>
+    <div><span class="v">&rho; = 0.76</span><span class="k">correlation with that commercial unit over 794 readings</span></div>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <h2>The problem</h2>
+  <p>Radiation is difficult to survey. There is nothing to see or smell, and
+    the areas most worth measuring are the ones where people should spend the
+    least time, which is why the work suits a telerobot. The equipment that does it properly is beyond the budget of a local authority, a university group or anyone wanting to check a site independently.</p>
+  <p>The aim was a radiation monitoring telerobot a person could actually build:
+    a mobile platform under £150 of parts, a sensor unit under £200, and an
+    output a non-specialist could read. The whole thing followed an open-source
+    methodology so somebody else could rebuild it or point it at a different
+    measurement entirely.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/rover-build.webp"
+           alt="The rover chassis on a cutting mat during assembly, with a Raspberry Pi GPIO pinout reference card beside it and servo wiring routed through the frame." width="1200" height="911">
+      <figcaption>Mid-build. The steering servo and the sensor bay were the two
+        constraints that drove the chassis layout.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/rover-payload.webp"
+           alt="The sensor unit, a Raspberry Pi and Geiger board in a printed vented case with ribbon and jumper wiring, photographed next to a domestic smoke detector with a five centimetre scale bar." width="1100" height="826">
+      <figcaption>The sensor unit beside a domestic smoke detector, which is
+        also the americium-241 source used to confirm the detector responds to
+        anything at all.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <h2>The rover and the logger</h2>
+  <p>The design settled into a rover and a detachable georeferenced radiation logger that rides on it. Keeping them separate mattered. The logger is the part that has to be trustworthy, and it can be characterised on its own. Because it detaches, it can also be carried in a backpack or fixed to a car when a survey covers open ground.</p>
+  <ul class="tick">
+    <li>Count rate and dose-rate estimate logged continuously, every reading
+      tagged to a GPS fix.</li>
+    <li>Teleoperation with a Bluetooth games controller, relayed over 4G through
+      a Raspberry Pi Zero, so range is not bounded by radio line of sight.</li>
+    <li>An operator GUI written in tkinter, carrying a live first-person video stream
+      alongside current count statistics, which is what makes driving at
+      distance workable.</li>
+    <li>Interpolated heat maps as the output, plus interactive maps for
+      inspecting the underlying readings.</li>
+  </ul>
+
+  <h2>Latency and standoff</h2>
+  <p>Driving a vehicle you cannot see, through a video feed, falls apart quickly if
+    the delay between input and picture is long enough to notice. The first
+    working version was well over that threshold, and most of the engineering
+    effort went into the optimisation that followed, which brought latency
+    down to 114 ms. Past that point the operator no longer has to compensate
+    for it, and the rover was driven at distances exceeding 300 metres.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed">
+    <video src="assets/video/rover-gui.mp4"
+           poster="assets/video/rover-gui.jpg"
+           autoplay muted loop playsinline preload="metadata"
+           aria-label="The operator holding a Bluetooth controller while a laptop shows the control interface: a live first-person video feed from the rover on the left and a live count-rate trace on the right."></video>
+    <figcaption>Driving from the interface rather than by eye. Live video on one
+      side, count rate on the other, both over a mobile network.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Checking the detector responds</h2>
+  <p>Before any mapping is worth doing, the detector has to be shown to react to a source. A domestic smoke detector contains a small sealed
+    americium-241 element, which makes it a convenient known quantity to move
+    towards and away from.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed fig-svg">
+    <img src="assets/fig/rover-source-response.svg"
+         alt="Count rate against time over 380 seconds. The rate sits around 18 counts per minute background, rises steadily from about 90 seconds to a peak of 43 counts per minute at 139 seconds, then decays back towards background." width="532" height="280">
+    <figcaption>Count rate through an approach and withdrawal. Background sits
+      around 18 CPM and the peak reaches 43. The raw trace is noisy enough that the rolling mean matters, which is the
+        central constraint of a cheap tube: count statistics need dwell time,
+        so survey speed trades directly against confidence.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Into the field</h2>
+  <p>Chapelcross was the obvious site. One of the earliest British nuclear power
+    stations, running Magnox reactors from 1959 to produce both electricity and
+    weapons-grade plutonium-239, in decommissioning since 2004 with work
+    expected to continue past 2095, and now home to the last radioactive waste
+    pond in Scotland.</p>
+  <p>The platform had to be robust enough to take repeatable readings while
+    crossing rough ground, which is what most of the site consists of.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <video src="assets/video/rover-field.mp4"
+             poster="assets/video/rover-field.jpg"
+             autoplay muted loop playsinline preload="metadata"
+             aria-label="The rover driving across uneven woodland ground, over leaf litter, roots and shadow, towards the camera."></video>
+      <figcaption>Driving over woodland leaf litter and roots.</figcaption>
+    </figure>
+    <figure>
+      <video src="assets/video/rover-onboard.mp4"
+             poster="assets/video/rover-onboard.jpg"
+             autoplay muted loop playsinline preload="none"
+             aria-label="The view from the rover's own forward-facing camera, low to the ground, moving along a shaded woodland track between trees."></video>
+      <figcaption>What the operator sees. The forward camera at ground
+        height.</figcaption>
+    </figure>
+    <figure>
+      <video src="assets/video/rover-heatmap.mp4"
+             poster="assets/video/rover-heatmap.jpg"
+             autoplay muted loop playsinline preload="none"
+             aria-label="An interpolated radiation heat map rendered as a plane tilting in three dimensions above satellite imagery of the survey area."></video>
+      <figcaption>Logged readings interpolated into a readable surface.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <p>I surveyed roughly three square kilometres around the perimeter, and
+    separately around Southampton for a baseline of ordinary background.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/rover-site.webp"
+         alt="Map of the area around the former Chapelcross nuclear power station with the survey route outlined in black and an interpolated count-rate field overlaid in red and blue." width="1200" height="675">
+    <figcaption>The wide survey. The outlined corridor is the route actually
+      driven and the shading is the interpolated count rate along it. The fill has to be read with the route in mind, because it interpolates across
+        ground the rover never covered.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>The pipeline</h2>
+  <p>One area came back consistently warmer than its surroundings, so I went
+    back and mapped it properly: 3,600 square metres, a reading every four
+    seconds, walking adjacent lines five metres apart, using the interface to
+    hold a constant line of latitude so the passes stayed straight.</p>
+  <p>The result was a band rather than a patch, running diagonally across the
+    survey area at count rates 35 to 52 per cent above the surroundings.
+    Contamination does not usually deposit in a straight line, so the shape
+    pointed at something buried underneath it.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/rover-pipeline.webp"
+         alt="A close-range interpolated count-rate map of a small area, with latitude and longitude axes. A distinct diagonal band of elevated count rate runs from the lower left to the upper right against a lighter background." width="1200" height="778">
+    <figcaption>The detailed survey. The diagonal band is what prompted the search for
+      something buried underneath it.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <p>The 2015 survey of the site does not document anything on that line. A 2002
+    Radiological Habits Survey does, in passing: an underground effluent pipeline whose route coincides with the band.</p>
+  <p>The corroboration is imperfect. The 2002 survey
+    used a gamma-only counter, so its readings are not directly comparable with
+    the sensor unit's. What it does provide is a trend, a 60 per cent reduction
+    in dose rate moving south towards the point where the pipeline crosses the
+    A75, and that trend appears in my data too.</p>
+
+  <h2>Validation</h2>
+  <p>Validating a cheap instrument needs a better one to compare against, and without a dosimeter the absolute accuracy of the Geiger counter could not
+    be established directly. What could be established was agreement and repeatability, which is most of what a survey map depends on.</p>
+  <p>Against a comparable commercial unit, across 794 collected data points, the
+    readings correlated at a Spearman's rank coefficient of 0.76. Precision came
+    out at ±7.3 per cent of recorded dose rate, and the sensor unit placed a
+    reading within 8 metres of its true position 95 per cent of the time. The
+    combined build cost was £281 across both devices, inside the £350 target and
+    around 28 per cent of what the commercial offering costs.</p>
+  <p>It is not accurate enough to certify a site as safe, but it can show
+    where a proper survey should look, which is what happened here.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('video[autoplay]').forEach(function (v) {
+    v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+  });
+}
+</script>
+</body>
+</html>

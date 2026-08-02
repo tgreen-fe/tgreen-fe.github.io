@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live race-outcome prediction - Thomas Green</title>
+<meta name="description" content="Bringing Formula E win prediction in-house with a gradient-boosted model on engineered race-state features, broadcast live on the world feed.">
+<meta property="og:title" content="Live race-outcome prediction - Thomas Green">
+<meta property="og:description" content="Bringing Formula E win prediction in-house with a gradient-boosted model on engineered race-state features, broadcast live on the world feed.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/race-prediction.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="./">Thomas Green</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Applied machine learning &middot; Live systems</p>
+  <h1>Live win prediction for the Formula E world feed</h1>
+  <p class="lede">The championship's win-probability graphic came from an external model that
+    called the winner correctly less than half the time at the point in the
+    race where it was being shown. We rebuilt it in-house.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>FIA Formula E World Championship</dd></div>
+    <div><dt>Role</dt><dd>Built and productionised the model</dd></div>
+    <div><dt>Period</dt><dd>2024 to present</dd></div>
+    <div><dt>Output</dt><dd>Live on the world feed</dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <div class="stats">
+    <div><span class="v">63%</span><span class="k">winner called correctly at 60 per cent race distance</span></div>
+    <div><span class="v">&lt;50%</span><span class="k">accuracy of the external model it replaced</span></div>
+    <div><span class="v">Global</span><span class="k">broadcast on the world feed</span></div>
+  </div>
+
+  <figure class="bleed fig-svg">
+    <img src="assets/fig/prediction-pipeline.svg"
+         alt="Pipeline from live race state, being timing and telemetry, into engineered features covering battery advantage, historical priors, race progression and speed trend, into a gradient-boosted classifier trained in-house, producing a win probability shown on the world feed." width="900" height="244">
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>The challenge</h2>
+  <p>Formula E is difficult to predict because the format is designed to keep the field close. Energy management means the car leading on lap 20 is not
+    necessarily the car that can still win on lap 30. Attack Mode reshuffles
+    the order deliberately. Safety cars compress the field and wipe out any
+    advantage built up over a stint. A model that leans on track position ends up wrong at the moments the broadcast wants to use it.</p>
+  <p>The external model was making that mistake. At below fifty per cent accuracy, at the point in the race where the graphic gets used, it was not worth broadcasting.</p>
+
+  <h2>The approach</h2>
+  <p>Most of the work was in the features rather than the model. Track position on its own says little here. What decides the race is position relative to the energy available to hold it, so the feature set is built around relative state rather than absolute position. Four families do the work: battery
+    advantage relative to the cars nearby, historical priors for the driver and
+    the circuit, how far through the race we are, and speed trend as a read on
+    whether a car is managing or pushing.</p>
+  <p>On top of those sits a gradient-boosted classifier. Boosted trees suit this
+    problem: the feature interactions matter, the data is not large, and the
+    model has to produce a calibrated probability under a live latency budget
+    rather than a label after the fact. Being able to see which features drive a given call matters too, since a
+      commentator may repeat the number on air.</p>
+
+  <h2>The result</h2>
+  <p>At sixty per cent race distance the model calls the winner correctly 63
+    per cent of the time, against under fifty for the version it replaced. It
+    runs live during races and its output is broadcast globally on the world
+    feed.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

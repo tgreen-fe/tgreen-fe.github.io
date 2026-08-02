@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An e-paper display that summarises a paper notebook - Thomas Green</title>
+<meta name="description" content="An e-paper display built into the cover of a hardback notebook, driven by a Raspberry Pi Pico, showing summaries of the handwritten pages inside it.">
+<meta property="og:title" content="An e-paper display that summarises a paper notebook - Thomas Green">
+<meta property="og:description" content="An e-paper display built into the cover of a hardback notebook, driven by a Raspberry Pi Pico, showing summaries of the handwritten pages inside it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/smart-notebook.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="./">Thomas Green</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Embedded systems &middot; Self-directed</p>
+  <h1>An e-paper display that summarises a paper notebook</h1>
+  <p class="lede">I write on paper and rarely look back at it, so I cut a
+    recess into the back cover of a notebook, fitted an e-paper display, and
+    set it up to show summaries of the recent pages.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>Personal project, built for my own use</dd></div>
+    <div><dt>Role</dt><dd>Sole author, whole system</dd></div>
+    <div><dt>Hardware</dt><dd>Raspberry Pi Pico, Waveshare e-paper</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/tgreen-fe/smart-notebook">smart-notebook</a></dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <div class="callout-wrap">
+      <img src="assets/img/notebook-internals.webp"
+           alt="The inside back cover of a hardback notebook, hollowed out and lined with black moulded trays. Set into it are a lithium-polymer pouch cell, a small blue charging module, a Raspberry Pi Pico and a Pico e-paper driver board, wired together with fine enamelled copper wire, with a ribbon cable running out to the display." width="1230" height="875">
+      <span class="callout l" style="left:47%; top:14%">Cell</span>
+      <span class="callout l" style="left:80%; top:25%">Pico</span>
+      <span class="callout l" style="left:23%; top:42%">USB-C charger</span>
+      <span class="callout l" style="left:58%; top:60%">Driver board</span>
+      <span class="callout l" style="left:56%; top:86%">Ribbon to panel</span>
+    </div>
+    <figcaption>Everything lives in the back board of the notebook: cell,
+      charger, Pico, driver board, and the ribbon out to the panel. The cover
+      still closes.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Why I built it</h2>
+  <p>This one is a personal build. I think better on paper and keep a notebook
+    properly, but a fortnight later the contents may as well not exist,
+    because nothing on a paper page is searchable. Digital notes fix that, but they lose the reason I write on paper in the first place.</p>
+  <p>The idea was to keep writing on paper and have the notebook do the recall
+    itself: an e-paper display in the cover, showing what the recent pages
+    were about and what the week looks like, updating without the notebook
+    ever being opened.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/notebook-build.webp"
+           alt="An early build stage outdoors on a weathered wooden bench: the notebook's board covers split open and hollowed, with filler smoothed into the recess, and a Raspberry Pi Pico and two flat battery cells laid in place to check they fit."
+           loading="lazy" width="1050" height="1060">
+      <figcaption>Checking the recess before committing. Most of the difficulty
+        in this build was mechanical, not electrical.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/notebook-panel.webp"
+           alt="Close view of the blue Pico e-paper driver board with its GPIO labels visible, a flat ribbon cable running from its connector into the edge of the e-paper panel behind it."
+           loading="lazy" width="505" height="449">
+      <figcaption>The driver board, and the ribbon into the panel. Three-colour
+        e-paper, so the palette is black, white and red and nothing in
+        between.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <h2>How it works</h2>
+  <p>The chain is longer than it looks, because none of the parts talk to each
+    other natively.</p>
+
+  <figure class="bleed fig-svg">
+    <img src="assets/fig/notebook-system.svg"
+         alt="System diagram. An open notebook with the 7.5-inch e-paper panel set into the inside cover, facing a handwritten page, and the driver board, Pico, USB-C controller and cell in the back board. Pages pass through a capture stage producing plain text, a compile stage of four language-model calls, a render stage producing a one-bit image, and a display stage where the Pico drives the panel, with a return arrow carrying the finished summary back to the e-paper." width="900" height="400">
+    <figcaption>The chain from a handwritten page to the panel in the cover.
+      Four separate language-model calls do the reading, the browser does the
+      typesetting, and the Pico only ever sees a finished one-bit
+      image.</figcaption>
+  </figure>
+  <ul class="tick">
+    <li>Pages get captured and turned into plain text, dropped into a watched
+      folder.</li>
+    <li>A file watcher notices the new file and triggers the compiler.</li>
+    <li>Four separate language-model calls run over the text: correct the
+      spelling, produce a short title, summarise in under forty words, and pull
+      out a date. Splitting them up rather than asking for all four at once made
+      each one far more reliable.</li>
+    <li>The results append to a JSON store, which a small local web page
+      renders alongside a weather forecast.</li>
+    <li>That page gets screenshotted headlessly at exactly the panel's
+      resolution, then reduced to a one-bit-per-channel image.</li>
+    <li>The Pico pulls the image and drives the panel. E-paper holds its state
+      with no power, so the display only costs anything at the moment it
+      changes.</li>
+  </ul>
+  <p>Rendering to a web page and screenshotting it is the decision I would keep.
+    Laying out mixed text and icons directly on a microcontroller is painful,
+    and HTML and CSS already do it well. Letting the browser do the
+    typesetting and treating the Pico as a dumb display removed most of that
+    work.</p>
+
+  <h2>Getting the image onto the microcontroller</h2>
+  <p>The awkward constraint is memory. A full-panel image is larger than the
+    Pico comfortably wants to hold, so a chunk of this project is a set of
+    compression experiments written in C, trying to find a format that is small enough to move and cheap enough to decode on a device with almost no memory to spare. That directory taught me more than anything else in the repository.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/notebook-display.webp"
+         alt="The e-paper display in the notebook cover, showing a seven-day weather forecast in red across the top with icons and temperatures, and below it a generated title and summary paragraph about recent news, with a date and page number in the margin."
+         loading="lazy" width="922" height="715">
+    <figcaption>The output, straight off the panel. Forecast across the top,
+      generated title and summary underneath.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Where it falls over</h2>
+  <p>The photograph above shows the failure modes rather than a staged best case.
+    The date reads 01/01/1999,
+    which is the sentinel the code returns when the extraction step cannot find
+    a date and gives up. The page number next to it is wrong. And the title is
+    not the short one the prompt asked for, it is most of a paragraph.</p>
+  <p>All three are the same class of problem: a language model asked for
+    structured output in a fixed format, complying most of the time but not always, with a regex behind it doing the actual parsing. The fallbacks work, so the display renders something sensible instead of
+      crashing, but what is on the panel in that photograph is the fallbacks
+      firing. If I rebuilt
+    it now I would use constrained decoding for the fields that have to be
+    machine-readable and stop trying to parse prose.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

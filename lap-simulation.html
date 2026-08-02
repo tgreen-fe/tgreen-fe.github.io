@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Circuit design simulation for Formula E - Thomas Green</title>
+<meta name="description" content="Lap-simulation tooling that lets the Formula E track-design team evaluate a prospective circuit before it is surveyed, cutting circuit review from weeks to a day.">
+<meta property="og:title" content="Circuit design simulation for Formula E - Thomas Green">
+<meta property="og:description" content="Lap-simulation tooling that lets the Formula E track-design team evaluate a prospective circuit before it is surveyed, cutting circuit review from weeks to a day.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/lap-simulation.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="./">Thomas Green</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Simulation &middot; Vehicle dynamics</p>
+  <h1>Evaluating circuit layouts before any survey data exists</h1>
+  <p class="lede">Formula E races on temporary street circuits. Deciding
+    whether a proposed layout will produce a good race used to take weeks of
+    manual analysis. It now takes about a day.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>FIA Formula E World Championship</dd></div>
+    <div><dt>Role</dt><dd>Built the tooling</dd></div>
+    <div><dt>Period</dt><dd>2024 to present</dd></div>
+    <div><dt>Users</dt><dd>The track-design team</dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <div class="stats">
+    <div><span class="v">1 day</span><span class="k">to judge a candidate layout, down from weeks of manual analysis</span></div>
+    <div><span class="v">0</span><span class="k">survey data, telemetry or site visits needed</span></div>
+    <div><span class="v">3</span><span class="k">demands balanced in the read-out: safety, energy, racing</span></div>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <h2>The problem</h2>
+  <p>A new Formula E circuit starts as lines on a city map. Long before any
+    survey happens, somebody has to answer whether racing on it would be safe,
+    whether the cars could complete it on the available energy, and whether it
+    would actually be entertaining. Those three pull against each other: a layout that is comfortably safe is
+      often processional, and a layout that rewards overtaking is usually
+      tight in the places that make the safety case harder.</p>
+  <p>The analysis behind that judgement was manual and slow, so fewer candidate
+    layouts got examined properly and options were discarded on intuition
+    rather than tested.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure class="fig-svg" style="margin:0">
+      <img src="assets/fig/lapsim-pipeline.svg"
+           alt="Vertical pipeline: proposed circuit geometry, then track model, then vehicle and energy model, then lap simulation, then design read-out covering lap time, energy and overtaking, iterated per candidate layout." width="360" height="536">
+    </figure>
+    <div>
+      <h2 style="margin-top:0">What it does</h2>
+      <p>The tool takes a proposed layout as geometry and works forward from
+        there. It builds a track model, runs it against a vehicle and energy
+        model of the car, and simulates the lap to produce the numbers the design team needs: how long a lap takes, how the
+        energy budget plays out across a race distance, and where on the
+        circuit a following car would have a realistic chance of getting
+        past.</p>
+      <p>It needs only the layout geometry, so it can be used early, while the design is still cheap to change.</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <h2>Why that matters</h2>
+  <p>Circuit reviews that took weeks of manual work now turn around in a day,
+    including for entirely new venues where there is no prior data. The bigger effect is that when evaluating a layout is cheap, the team compares several instead of assessing only the one proposed, including options that would not previously have justified the effort.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

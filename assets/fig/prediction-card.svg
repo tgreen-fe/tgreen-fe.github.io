@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 506" role="img" aria-label="Three-stage pipeline from live race state through engineered features to a win probability">
+  <g font-family="Helvetica, Arial, sans-serif">
+    <rect x="30" y="168" width="240" height="150" fill="none" stroke="#33302e" stroke-width="2.5"/>
+    <text x="150" y="235" font-size="31" font-weight="700" fill="#33302e" text-anchor="middle" letter-spacing="1.5">LIVE RACE</text>
+    <text x="150" y="277" font-size="31" font-weight="700" fill="#33302e" text-anchor="middle" letter-spacing="1.5">STATE</text>
+    <path d="M270 243 H 320" stroke="#990f3d" stroke-width="2.5" fill="none"/>
+    <path d="M328 243 l -14 -7 v 14 z" fill="#990f3d"/>
+    <rect x="330" y="168" width="240" height="150" fill="none" stroke="#33302e" stroke-width="2.5"/>
+    <text x="450" y="235" font-size="31" font-weight="700" fill="#33302e" text-anchor="middle" letter-spacing="1.5">ENGINEERED</text>
+    <text x="450" y="277" font-size="31" font-weight="700" fill="#33302e" text-anchor="middle" letter-spacing="1.5">FEATURES</text>
+    <path d="M570 243 H 620" stroke="#990f3d" stroke-width="2.5" fill="none"/>
+    <path d="M628 243 l -14 -7 v 14 z" fill="#990f3d"/>
+    <rect x="630" y="168" width="240" height="150" fill="none" stroke="#990f3d" stroke-width="2.5"/>
+    <text x="750" y="257" font-size="46" font-weight="700" fill="#990f3d" text-anchor="middle" letter-spacing="2">WIN&#160;%</text>
+    <text x="450" y="420" font-size="23" fill="#66605c" text-anchor="middle" letter-spacing="1">63% CORRECT AT 60% RACE DISTANCE, LIVE ON THE WORLD FEED</text>
+  </g>
+</svg>

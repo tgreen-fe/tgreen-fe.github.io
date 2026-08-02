@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tactile perception in vision-language-action models - Thomas Green</title>
+<meta name="description" content="MSc research comparing three ways of encoding optical-tactile data for a pretrained vision-language-action model, evaluated on cloth folding with an ABB YuMi.">
+<meta property="og:title" content="Tactile perception in vision-language-action models - Thomas Green">
+<meta property="og:description" content="MSc research comparing three ways of encoding optical-tactile data for a pretrained vision-language-action model, evaluated on cloth folding with an ABB YuMi.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/tactile-vla.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="./">Thomas Green</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Robot learning &middot; MSc dissertation</p>
+  <h1>Comparing three ways of giving a pretrained VLA access to touch</h1>
+  <p class="lede">Pretrained VLAs are trained on vision and language. There is no settled answer on how to give one a tactile signal, so I am comparing three ways of doing
+    it on a task where touch should matter.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>MSc Robotics, University of Bristol</dd></div>
+    <div><dt>Role</dt><dd>Sole author, supervised</dd></div>
+    <div><dt>Period</dt><dd>June to September 2026</dd></div>
+    <div><dt>Status</dt><dd>In progress, results pending</dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <figure class="bleed fig-svg">
+    <img src="assets/fig/vla-architecture.svg"
+         alt="RGB observation and a task instruction feed a vision-language-action backbone. An optical tactile sensor feeds the same backbone through one of three encoding strategies: as an image, as language tokens, or via a learned encoder. The backbone outputs a fold-direction selection for an ABB YuMi." width="900" height="400">
+    <span class="stamp fig-stamp">In progress</span>
+    <figcaption>Everything is held constant except the route the tactile signal
+      takes into the backbone.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+
+  <h2>The question</h2>
+  <p>A vision-language-action model maps what the robot sees and what it has
+    been told into what it should do next. The pretrained ones are trained on
+    vision and language, because that is what there is a lot of. Touch is
+    different: there is far less of it, it is sensor-specific, and it does not
+    arrive in a format the backbone was built to read.</p>
+  <p>So there is a choice to make about how to present it, and the choice is
+    usually made by convention rather than by comparison. You can render the
+    tactile reading as an image and push it through the vision encoder, which
+    is convenient because optical-tactile sensors produce images anyway. You
+    can describe the contact in words and let the language side carry it. Or
+    you can train a dedicated encoder and give the backbone a representation
+    built for the job.</p>
+  <p>Each has an argument for it, and the comparison is about which one a
+    pretrained model can actually use.</p>
+
+  <h2>The task</h2>
+  <p>Cloth folding on an ABB YuMi, with the target being fold-direction
+    selection by material. I picked it because vision alone is not enough. Two fabrics can look near-identical and
+    behave completely differently under the gripper, and which way a fold wants
+    to go depends on properties you find out by touching. If tactile input is
+    doing anything, it should show up here.</p>
+
+  <figure class="bleed plain">
+    <img src="assets/img/yumi-cloth.webp" loading="lazy"
+         alt="An ABB YuMi dual-arm robot at the work table, with a striped child's top laid out on the surface in front of it"
+         width="768" height="945">
+    <figcaption>The YuMi at the folding table. The garments are the awkward
+      part: two fabrics can look almost the same and still behave differently
+      under the gripper.</figcaption>
+  </figure>
+
+  <h2>How it is set up</h2>
+  <ul class="tick">
+    <li>An optical-tactile sensor as the touch source, so the raw signal is an
+      image and all three encoding routes start from the same data.</li>
+    <li>LoRA fine-tuning on the pretrained backbone, which keeps the comparison
+      affordable and stops the base model being overwritten by a small tactile
+      dataset.</li>
+    <li>SmolVLA and OpenVLA as the candidate backbones.</li>
+    <li>Evaluation split by material, since a result that only holds on one fabric
+      would not generalise.</li>
+  </ul>
+
+  <h2>Where it stands</h2>
+  <p>Before the comparison, I fine-tuned SmolVLA on a single consumer GPU
+    for a YuMi cloth-folding task, which is what convinced me the pipeline was
+    workable at this scale. OpenVLA gave mixed results on the same problem, and
+    the reason looks like a mismatch between its discretised action
+    representation and the continuous control the arm wants. That shaped the current setup.</p>
+  <p>The comparison itself is running now. I will put the results here when I have
+    them.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
