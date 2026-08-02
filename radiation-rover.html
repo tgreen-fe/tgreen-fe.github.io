@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff1e5">
 <title>A low-cost radiation-mapping telerobot - Thomas Green</title>
 <meta name="description" content="A teleoperated rover carrying a georeferenced Geiger counter, built for £281, which traced a buried effluent pipeline that the most recent site survey had not documented.">
 <meta property="og:title" content="A low-cost radiation-mapping telerobot - Thomas Green">
@@ -76,8 +77,7 @@
 <div class="wrap prose">
   <h2>The problem</h2>
   <p>Radiation is difficult to survey. There is nothing to see or smell, and
-    the areas most worth measuring are the ones where people should spend the
-    least time, which is why the work suits a telerobot. The equipment that does it properly is beyond the budget of a local authority, a university group or anyone wanting to check a site independently.</p>
+    the areas most worth measuring are the ones where people should spend the least time, so the work suits a telerobot. The equipment that does it properly is beyond the budget of a local authority, a university group or anyone wanting to check a site independently.</p>
   <p>The aim was a radiation monitoring telerobot a person could actually build:
     a mobile platform under £150 of parts, a sensor unit under £200, and an
     output a non-specialist could read. The whole thing followed an open-source
@@ -110,16 +110,15 @@
     <li>Count rate and dose-rate estimate logged continuously, every reading
       tagged to a GPS fix.</li>
     <li>Teleoperation with a Bluetooth games controller, relayed over 4G through
-      a Raspberry Pi Zero, so range is not bounded by radio line of sight.</li>
+      a Raspberry Pi Zero, so range isn't bounded by radio line of sight.</li>
     <li>An operator GUI written in tkinter, carrying a live first-person video stream
-      alongside current count statistics, which is what makes driving at
-      distance workable.</li>
+      alongside current count statistics, which makes driving at distance workable.</li>
     <li>Interpolated heat maps as the output, plus interactive maps for
       inspecting the underlying readings.</li>
   </ul>
 
   <h2>Latency and standoff</h2>
-  <p>Driving a vehicle you cannot see, through a video feed, falls apart quickly if
+  <p>Driving a vehicle you can't see, through a video feed, falls apart quickly if
     the delay between input and picture is long enough to notice. The first
     working version was well over that threshold, and most of the engineering
     effort went into the optimisation that followed, which brought latency
@@ -217,7 +216,7 @@
     hold a constant line of latitude so the passes stayed straight.</p>
   <p>The result was a band rather than a patch, running diagonally across the
     survey area at count rates 35 to 52 per cent above the surroundings.
-    Contamination does not usually deposit in a straight line, so the shape
+    Contamination doesn't usually deposit in a straight line, so the shape
     pointed at something buried underneath it.</p>
 </div>
 
@@ -231,7 +230,7 @@
 </div>
 
 <div class="wrap prose">
-  <p>The 2015 survey of the site does not document anything on that line. A 2002
+  <p>The 2015 survey of the site doesn't document anything on that line. A 2002
     Radiological Habits Survey does, in passing: an underground effluent pipeline whose route coincides with the band.</p>
   <p>The corroboration is imperfect. The 2002 survey
     used a gamma-only counter, so its readings are not directly comparable with
@@ -248,8 +247,7 @@
     reading within 8 metres of its true position 95 per cent of the time. The
     combined build cost was £281 across both devices, inside the £350 target and
     around 28 per cent of what the commercial offering costs.</p>
-  <p>It is not accurate enough to certify a site as safe, but it can show
-    where a proper survey should look, which is what happened here.</p>
+  <p>It isn't accurate enough to certify a site as safe, but it can show where a proper survey should look.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>

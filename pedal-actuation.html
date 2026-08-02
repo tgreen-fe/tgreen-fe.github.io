@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff1e5">
 <title>Autonomous pedal-actuation robot - Thomas Green</title>
 <meta name="description" content="A retrofit robot that operates a conventional vehicle's pedals under closed-loop control, characterised by step and PRBS system identification.">
 <meta property="og:title" content="Autonomous pedal-actuation robot - Thomas Green">
@@ -36,7 +37,7 @@
 <div class="wrap proj-head">
   <p class="eyebrow">Controls &middot; Embedded systems</p>
   <h1>A retrofit robot that operates a car's pedals</h1>
-  <p class="lede">Rather than replace a vehicle's control systems, this robot
+  <p class="lede">Instead of replacing a vehicle's control systems, this robot
     sits where the driver's feet go and works the pedals directly, so a
     conventional car can be automated without touching its wiring.</p>
 
@@ -90,8 +91,7 @@
 <div class="wrap prose">
   <h2>The problem</h2>
   <p>Testing autonomous driving logic normally means a vehicle built for it.
-    That is expensive, and it rules out testing on the enormous number of
-    conventional cars already on the road. A retrofit actuator that presses the
+    That's expensive, and it rules out testing on the enormous number of conventional cars already on the road. A retrofit actuator that presses the
     pedals is a way around this: it needs no access to the vehicle's own
     control network, it can be moved between vehicles, and it can be removed
     entirely afterwards.</p>
@@ -111,7 +111,7 @@
 <div class="wrap prose">
   <h2>Characterising the actuator</h2>
   <p>The plant here is awkward: a motor driving a linkage against a pedal with its
-    own return spring and a non-linear feel. A controller cannot be tuned for that without measuring it first, so the first work was system identification rather than control.</p>
+    own return spring and a non-linear feel. A controller can't be tuned for that without measuring it first, so the first job was system identification, not control.</p>
   <p>I ran a family of excitation signals through the actuator and logged the
     position response: steps at several amplitudes, ramps, random square waves
     and pseudo-random binary sequences at a range of dwell times. The PRBS runs are the useful ones for fitting a model, because they excite a
@@ -135,22 +135,19 @@
     <img src="assets/fig/pedal-prbs.svg"
          alt="Two-panel plot. The top panel shows a pseudo-random binary drive signal alternating between plus and minus 125 PWM with varying dwell times over three seconds. The lower panel shows the corresponding pedal position response oscillating between roughly 380 and 470 ADC counts." width="532" height="309">
     <figcaption>Pseudo-random binary excitation and the resulting motion. The dwell times
-      vary, so the run covers a band of frequencies rather than the single one
-      a fixed-period square wave would excite.</figcaption>
+      vary, so the run covers a band of frequencies instead of the single one a fixed-period square wave would excite.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
   <h2>Trusting the position signal</h2>
   <p>Closed-loop control is only as good as the feedback. The pedal sensor sits
-    on the pedal itself, so it measures the quantity that matters, but it is also
-    exposed and its zero moves as the mechanism is disturbed. I cross-checked
+    on the pedal itself, so it measures the quantity that matters, but it's also exposed and its zero moves as the mechanism is disturbed. I cross-checked
     it against a potentiometer on the actuator crank, which is mechanically
     protected but only measures the pedal position indirectly through the
     linkage.</p>
   <p>Across a full stroke the two agree to within about two per cent of travel.
-    That makes the crank signal a usable redundant channel, and a disagreement
-      between the two a fault indicator rather than noise.</p>
+    That makes the crank signal a usable redundant channel, and a disagreement between the two a fault indicator, not noise.</p>
 </div>
 
 <div class="wrap">
@@ -165,10 +162,9 @@
 
 <div class="wrap prose">
   <h2>What broke</h2>
-  <p>Two things broke, and both were mechanical rather than electrical. The gearbox
+  <p>Two things broke, and both were mechanical, not electrical. The gearbox
     developed enough backlash to be visible in the position trace as a dead
-    band around every direction reversal, which matters because pedal
-    modulation is mostly small reversals rather than full-travel sweeps. And a
+    band around every direction reversal, which matters because pedal modulation is mostly small reversals, not full-travel sweeps. And a
     crank arm cracked at the pin slot, where the section is thinnest and the
     load is highest.</p>
 </div>
@@ -197,8 +193,7 @@
   <h2>What I took from it</h2>
   <p>Measuring the plant before touching the controller is the habit that stuck. It
     took time up front and saved more later, because tuning stopped being
-    guesswork. It is also why I regret not instrumenting the vine robot
-    earlier.</p>
+    guesswork. It's also why I regret not instrumenting the vine robot earlier.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>

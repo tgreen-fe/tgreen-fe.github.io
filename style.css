@@ -538,3 +538,16 @@ article .prose > .stats { max-width: 50rem; }
 /* bullet lists join the centred column (ul.tick's own margin rule otherwise
    wins the cascade and pins it left) */
 article .prose ul.tick { margin-inline: auto; }
+
+/* ------------------------------------------------------------ mobile comfort */
+
+@media (max-width: 40rem) {
+  /* bigger touch targets without changing the visual layout */
+  .site-nav a, .site-foot .set a, .hero-links a, .dateline .site-nav a {
+    padding: 0.55rem 0.35rem; margin: -0.55rem -0.35rem;
+  }
+  /* credential entries align left with the rest of the mobile hero */
+  .facts li { text-align: left; }
+  /* keep long words from forcing horizontal scroll in justified prose */
+  .prose p { hyphens: auto; overflow-wrap: break-word; }
+}

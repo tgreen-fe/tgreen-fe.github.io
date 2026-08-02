@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff1e5">
 <title>Tactile perception in vision-language-action models - Thomas Green</title>
 <meta name="description" content="MSc research comparing three ways of encoding optical-tactile data for a pretrained vision-language-action model, evaluated on cloth folding with an ABB YuMi.">
 <meta property="og:title" content="Tactile perception in vision-language-action models - Thomas Green">
@@ -36,8 +37,7 @@
 <div class="wrap proj-head">
   <p class="eyebrow">Robot learning &middot; MSc dissertation</p>
   <h1>Comparing three ways of giving a pretrained VLA access to touch</h1>
-  <p class="lede">Pretrained VLAs are trained on vision and language. There is no settled answer on how to give one a tactile signal, so I am comparing three ways of doing
-    it on a task where touch should matter.</p>
+  <p class="lede">Pretrained VLAs are trained on vision and language. There is no settled answer on how to give one a tactile signal, so I'm comparing three ways of doing it on a task where touch should matter.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>MSc Robotics, University of Bristol</dd></div>
@@ -62,11 +62,9 @@
   <h2>The question</h2>
   <p>A vision-language-action model maps what the robot sees and what it has
     been told into what it should do next. The pretrained ones are trained on
-    vision and language, because that is what there is a lot of. Touch is
-    different: there is far less of it, it is sensor-specific, and it does not
-    arrive in a format the backbone was built to read.</p>
-  <p>So there is a choice to make about how to present it, and the choice is
-    usually made by convention rather than by comparison. You can render the
+    vision and language, because that's what there is a lot of. Touch is
+    different: there's far less of it, it's sensor-specific, and it doesn't arrive in a format the backbone was built to read.</p>
+  <p>So there's a choice about how to present it, and it's usually made by convention, not comparison. You can render the
     tactile reading as an image and push it through the vision encoder, which
     is convenient because optical-tactile sensors produce images anyway. You
     can describe the contact in words and let the language side carry it. Or
@@ -99,18 +97,15 @@
       affordable and stops the base model being overwritten by a small tactile
       dataset.</li>
     <li>SmolVLA and OpenVLA as the candidate backbones.</li>
-    <li>Evaluation split by material, since a result that only holds on one fabric
-      would not generalise.</li>
+    <li>Evaluation split by material, since a result that only holds on one fabric wouldn't generalise.</li>
   </ul>
 
   <h2>Where it stands</h2>
   <p>Before the comparison, I fine-tuned SmolVLA on a single consumer GPU
-    for a YuMi cloth-folding task, which is what convinced me the pipeline was
-    workable at this scale. OpenVLA gave mixed results on the same problem, and
+    for a YuMi cloth-folding task, which convinced me the pipeline was workable at this scale. OpenVLA gave mixed results on the same problem, and
     the reason looks like a mismatch between its discretised action
     representation and the continuous control the arm wants. That shaped the current setup.</p>
-  <p>The comparison itself is running now. I will put the results here when I have
-    them.</p>
+  <p>The comparison itself is running now. I'll put the results here when I have them.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>

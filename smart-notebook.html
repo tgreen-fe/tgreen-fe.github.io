@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff1e5">
 <title>An e-paper display that summarises a paper notebook - Thomas Green</title>
 <meta name="description" content="An e-paper display built into the cover of a hardback notebook, driven by a Raspberry Pi Pico, showing summaries of the handwritten pages inside it.">
 <meta property="og:title" content="An e-paper display that summarises a paper notebook - Thomas Green">
@@ -151,15 +152,12 @@
   <h2>Where it falls over</h2>
   <p>The photograph above shows the failure modes rather than a staged best case.
     The date reads 01/01/1999,
-    which is the sentinel the code returns when the extraction step cannot find
-    a date and gives up. The page number next to it is wrong. And the title is
+    which is the sentinel the code returns when the extraction step can't find a date and gives up. The page number next to it is wrong. And the title is
     not the short one the prompt asked for, it is most of a paragraph.</p>
   <p>All three are the same class of problem: a language model asked for
     structured output in a fixed format, complying most of the time but not always, with a regex behind it doing the actual parsing. The fallbacks work, so the display renders something sensible instead of
       crashing, but what is on the panel in that photograph is the fallbacks
-      firing. If I rebuilt
-    it now I would use constrained decoding for the fields that have to be
-    machine-readable and stop trying to parse prose.</p>
+      firing. If I rebuilt it now I'd use constrained decoding for the fields that have to be machine-readable and stop trying to parse prose.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>
