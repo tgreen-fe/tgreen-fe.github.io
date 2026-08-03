@@ -188,6 +188,7 @@ article .prose ul.tick { margin-inline: auto; }
 .home .hero { text-align: center; }
 .home #more .lede { text-align: center; }
 .home .gh-link { text-align: center; }
+.home #contact .prose > h2 { max-width: none; }
 .home #contact .prose p { text-align: center; margin-inline: auto; }
 .home .hero h1, .home .hero .lede { margin-inline: auto; }
 .home .facts { justify-content: center; }
