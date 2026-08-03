@@ -186,6 +186,7 @@ article .prose ul.tick { margin-inline: auto; }
 /* The homepage hero runs centred; body columns, spec tables and section
    dividers stay left. */
 .home .hero { text-align: center; }
+.home h2 { text-align: center; }
 .home .hero h1, .home .hero .lede { margin-inline: auto; }
 .home .facts { justify-content: center; }
 .home .facts li { text-align: center; }
