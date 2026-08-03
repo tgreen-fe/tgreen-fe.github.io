@@ -187,6 +187,9 @@ article .prose ul.tick { margin-inline: auto; }
    dividers stay left. */
 .home .hero { text-align: center; }
 .home h2 { text-align: center; }
+.home #more .lede { text-align: center; }
+.home .gh-link { text-align: center; }
+.home #contact .prose p { text-align: center; margin-inline: auto; }
 .home .hero h1, .home .hero .lede { margin-inline: auto; }
 .home .facts { justify-content: center; }
 .home .facts li { text-align: center; }
@@ -310,9 +313,11 @@ article figcaption::before {
 }
 .fig-svg img { border: 0; background: transparent; }
 
+/* 15rem minimum lets a three-clip row sit three-across inside the 50rem
+   media column instead of wrapping 2+1 and leaving a blank cell. */
 .media-row {
   display: grid; gap: 1.2rem; margin: 2rem 0;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 }
 .media-row figure { margin: 0; }
 
