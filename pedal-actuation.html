@@ -112,7 +112,7 @@
     pedals is a way around this: it needs no access to the vehicle's own
     control network, it can be moved between vehicles, and it can be removed
     entirely afterwards.</p>
-  <p>A driver's foot is fast, precise enough, and provides its own position feedback. Replacing it mechanically means solving position sensing, force delivery and closed-loop control in
+  <p>A driver's foot is fast, precise enough, and it feels its own position. Replacing it mechanically means solving position sensing, force delivery and closed-loop control in
     a package that fits in a footwell.</p>
 </div>
 
@@ -128,7 +128,7 @@
 <div class="wrap prose">
   <h2>Characterising the actuator</h2>
   <p>The plant here is awkward: a motor driving a linkage against a pedal with its
-    own return spring and a non-linear feel. A controller can't be tuned for that without measuring it first, so the first job was system identification, not control.</p>
+    own return spring and a non-linear feel. A controller can't be tuned for that without measuring it first, so the first job was system identification rather than control.</p>
   <p>I ran a family of excitation signals through the actuator and logged the
     position response: steps at several amplitudes, ramps, random square waves
     and pseudo-random binary sequences at a range of dwell times. The PRBS runs are the useful ones for fitting a model, because they excite a
@@ -209,7 +209,7 @@
 
   <h2>What I took from it</h2>
   <p>Measuring the plant before touching the controller is the habit that stuck. It
-    took time up front and saved more later, because tuning stopped being
+    cost time at the start and saved more later, because tuning stopped being
     guesswork. It's also why I regret not instrumenting the vine robot earlier.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>

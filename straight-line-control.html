@@ -37,11 +37,11 @@
 <div class="wrap proj-head">
   <p class="eyebrow">Embedded control &middot; Applied machine learning</p>
   <h1>Straight-line control on a differential-drive robot</h1>
-  <p class="lede">A warehouse robot that can't hold a straight line will eventually
-    hit something. We compared four ways of making a small differential-drive robot
-    hold one, ending with a network trained on the robot itself to copy the best of
-    the others. Fusing two heading sources solved it. The learned controller didn't
-    improve on that, however the data does show why.</p>
+  <p class="lede">Give a small differential-drive robot the same command on both
+    motors and it curves. We compared four ways of correcting that, ending with a
+    network trained on the robot itself to copy the best of the others. Fusing two
+    heading sources solved it. The learned controller didn't improve on that,
+    because the heading estimate it was trained to copy was itself drifting.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>MSc Robotics, Bristol</dd></div>
@@ -72,8 +72,7 @@
   <p>Give two nominally identical motors the same PWM and the robot curves. Ours
     curved left, about 0.6 m off the line over a two-metre run, and there was
     nothing wrong with it. That's what manufacturing tolerance, tyre wear and an
-    uneven floor add up to. In a warehouse it's the same effect that drives a robot
-    into a rack.</p>
+    uneven floor add up to.</p>
   <p>Correcting it isn't difficult in itself. The harder part is that a gain you
     tune on the bench won't survive a payload sitting over one wheel, so we worked
     up from the crudest controller to one that learns its own correction, measuring
@@ -132,7 +131,7 @@
 
 <div class="wrap prose">
   <h2>What happened</h2>
-  <p>The escalation works up to a point. PID roughly halved the open-loop drift,
+  <p>The escalation helps up to a point. PID roughly halved the open-loop drift,
     and fusing the two heading sources removed almost all of it. Unweighted, the
     robot finished within a centimetre or two of the line, run after run.</p>
   <p>The learned controller didn't beat that. Unweighted it finished about 0.03 m
@@ -146,13 +145,13 @@
     <img src="assets/fig/threepi-deviation.svg"
          alt="Measured deviation at the end of each run, by controller and load. Unweighted: open-loop plus 0.60 metres, PID plus 0.32, fused heading minus 0.01, learned controller minus 0.03. With 150 grams on the left: fused heading plus 0.15, learned plus 0.04. With 150 grams on the right: fused heading minus 0.07, learned minus 0.05." width="532" height="288">
     <figcaption>Tape measurements against the track, three runs per condition. The
-      learned controller loses on the easy case and wins on the hard one, which
-      wasn't the result we expected.</figcaption>
+      learned controller finished further off the line unweighted, and closer under
+      load. That wasn't the result we expected.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
-  <h2>Why it lost</h2>
+  <h2>Where the error came from</h2>
   <p>Comparing what the robot's odometry reported at the end of a run against the
     tape measurement, the two disagree by up to a quarter of a metre. That gap is
     the robot's own position error, and odometry is the signal the controller was
@@ -163,8 +162,8 @@
   <figure class="bleed fig-svg">
     <img src="assets/fig/threepi-drift.svg"
          alt="Paired bars comparing odometry estimate against tape measurement for the fused-heading and learned controllers under three load conditions. The pairs disagree in every condition, most severely for the learned controller under load, where odometry reports plus 0.29 metres against a measured plus 0.04, and minus 0.21 against a measured minus 0.05." width="532" height="280">
-    <figcaption>The robot's estimate against the measurement. A controller can't
-      correct an error its own sensors are producing.</figcaption>
+    <figcaption>The robot's own estimate against the tape measurement at the end
+      of each run.</figcaption>
   </figure>
 </div>
 
@@ -176,7 +175,7 @@
     expert's output, however it also learned to ignore the disagreement between the
     two sensors, and that was the one input that could have told it the estimate was
     going wrong.</p>
-  <p>So this is less a problem with the network than with what it was given to copy.
+  <p>That's a problem with the training signal rather than with the network.
     Two changes would be worth trying. Weight the gyro more heavily in the fusion
     before generating any training data, and train over a distance long enough for
     the drift to show up in the score. Our runs were about three metres, and that's
@@ -184,13 +183,13 @@
 
   <h2>What I'd take from it</h2>
   <p>The learned controller was the part of the brief I was most interested in, and
-    it contributed least to the result. Straight-line driving got fixed by noticing
+    it isn't what fixed the problem. Straight-line driving got fixed by noticing
     that two mediocre heading sources fail in different ways, then combining them.
-    The result only became legible because we measured from outside the robot
-    instead of trusting the number it prints.</p>
-  <p>The result went against our hypothesis, and that's only useful if you can point
-    at a cause. Here the cause is visible in the odometry comparison above, and
-    that's the part of the work I'd stand behind.</p>
+    We only saw that because we measured from outside the robot instead of trusting
+    its own odometry.</p>
+  <p>The result went against our hypothesis, which is only worth much if you can
+    point at a cause. Here the cause is visible in the odometry comparison above,
+    and that's the part of the work I'd stand behind.</p>
 
   <h2>Credit</h2>
   <p>This was a three-person study for the Robotics Systems unit, with Callum
