@@ -215,9 +215,15 @@ article .prose ul.tick { margin-inline: auto; }
 }
 .card:hover { border-color: var(--ink); }
 .card:hover h3 { color: var(--acc); }
-.card a.card-hit {
+/* Not anchor-scoped: a placeholder card uses a div here, with no link. */
+.card .card-hit {
   display: block; height: 100%; color: inherit; text-decoration: none;
 }
+
+/* Nothing to click, so drop the affordances that promise otherwise. */
+.card.is-placeholder:hover { border-color: var(--rule); }
+.card.is-placeholder:hover h3 { color: inherit; }
+.card.is-placeholder .card-body p { color: var(--muted); font-style: italic; }
 
 .card-shot {
   aspect-ratio: 16 / 9; overflow: hidden; position: relative;
