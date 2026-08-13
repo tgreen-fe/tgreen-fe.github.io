@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f1f1ee">
+<title>Classification, clustering and RL on one game world - Thomas Green</title>
+<meta name="description" content="Bristol MSc coursework comparing two algorithms on each of three machine-learning tasks in a dungeon game world: sprite classification, clustering a damaged sensor table, and learning a maze.">
+<meta property="og:title" content="Classification, clustering and RL on one game world - Thomas Green">
+<meta property="og:description" content="Bristol MSc coursework comparing two algorithms on each of three machine-learning tasks in a dungeon game world: sprite classification, clustering a damaged sensor table, and learning a maze.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/dungeon-ml.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">Thomas Green</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Applied machine learning &middot; MSc coursework</p>
+  <h1>Classification, clustering and RL on one game world</h1>
+  <p class="lede">The assessment for Bristol's AI for Robotics unit is set in a
+    dungeon-crawler game world. The brief: pick three tasks in that world and
+    solve one with supervised learning, one with unsupervised learning and one
+    with reinforcement learning, comparing two algorithms on each.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>AI for Robotics, MSc Robotics, Bristol</dd></div>
+    <div><dt>Role</dt><dd>Sole author</dd></div>
+    <div><dt>Period</dt><dd>Spring 2026</dd></div>
+    <div><dt>Approach</dt><dd>Two algorithms per task, compared</dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <div class="stats">
+    <div><span class="v">99.3%</span><span class="k">five-species test accuracy from the SVM classifier</span></div>
+    <div><span class="v">97.5%</span><span class="k">hostile or friendly, read from a single attribute</span></div>
+    <div><span class="v">~500</span><span class="k">episodes to learn a 20&times;20 maze</span></div>
+  </div>
+</div>
+
+<div class="wrap prose">
+
+  <h2>The setup</h2>
+  <p>The unit hands you a game world instead of a robot. A maze dungeon is
+    populated by five species of entity, some friendly and some hostile, and
+    three datasets describe it: 8,023 sprite images of the entities, a table
+    of sensor readings for 10,000 of them with most of its species labels
+    destroyed, and a Gymnasium gridworld of the maze itself. The brief casts
+    the robot as HeroBot, so the report is written as its quest log.</p>
+  <p>I set the three tasks up as the pipeline the robot would actually need:
+    identify entities from their images, recover the species structure from
+    the damaged table, and learn to navigate the maze.</p>
+
+  <h2>Friend or foe from sprites</h2>
+  <p>The image set is skewed. Humans make up 40 per cent of it and the rarest
+    class, the winged rat, 7 per cent, so before training anything I looked
+    for features that would prop up the rare class: per-class colour profiles,
+    entity size, and HOG shape descriptors. Size separated the winged rat
+    well and went in alongside the raw pixels. HOG separated much less than I
+    expected and was left out.</p>
+  <p>KNN came first, with k=3 chosen by validation accuracy and a cosine
+    distance, which edged out euclidean. It reached 97.6 per cent on the
+    1,604 held-out test images. The metric I actually cared about was hostile
+    entities passed as friendly, because in the game's terms that's the error
+    that gets you ambushed. KNN made six of those. The SVM, with an RBF
+    kernel and C=10 from a short randomised search, made one, at 99.3 per
+    cent overall. Both classifiers had perfect recall on the winged rat, the
+    class I'd worried about.</p>
+  <p>The persistent confusion was orc against lizard, and the misclassified
+    images point at why: the weapons are similar and fill a lot of the frame.
+    The other honest note is that I picked k on overall accuracy and only
+    checked afterwards that the same k minimised the error I cared about. It
+    did here, but that was luck rather than method.</p>
+
+  <figure class="bleed plain">
+    <img src="assets/img/dungeon-misclassified.webp" loading="lazy"
+         alt="A grid of pixel-art dungeon entity sprites, each labelled with its true and predicted class, mostly lizards predicted as orcs"
+         width="1356" height="985">
+    <figcaption>All eleven of the SVM's mistakes in 1,604 test images. Most
+      are lizards read as orcs, and the shared weapon shapes are the likely
+      cause.</figcaption>
+  </figure>
+
+  <h2>Species from a damaged table</h2>
+  <p>The sensor table gives ten attributes per entity, and only 500 of its
+    10,000 species labels survive. So the structure has to come from
+    clustering, with the surviving labels held back as a check on the result.
+    Missing values were filled with each attribute's median and everything
+    standardised, since both algorithms measure distance.</p>
+  <p>K-Means gave no clear elbow, so I chose k by silhouette score, which
+    pointed at seven clusters, two more than there are species. Projected
+    onto two principal components the clusters are clean, and against the
+    surviving labels each one contains a single species. The extra two exist
+    because humans and lizards each split in half; the second human cluster
+    scores much higher on intelligence and magic, so the split reflects real
+    structure in the data.</p>
+  <p>Ward-linkage hierarchical clustering recovered the five species
+    directly, one per cluster, and its tree carries more information than the
+    flat result. A split higher up separates the friendly species from the
+    neutral and hostile ones, and a small decision tree fitted to that split
+    showed one attribute, stench, predicting hostile or friendly on its own
+    97.5 per cent of the time. That's the useful output: one scan instead of
+    ten.</p>
+
+  <figure class="bleed plain">
+    <img src="assets/img/dungeon-pca.webp" loading="lazy"
+         alt="Scatter plot of dungeon entities on two principal components, forming seven coloured clusters labelled by species"
+         width="1016" height="520">
+    <figcaption>The sensor table on its first two principal components,
+      coloured by K-Means cluster and labelled where a species label
+      survives. Humans and lizards each split in two.</figcaption>
+  </figure>
+
+  <h2>Learning the maze</h2>
+  <p>The gridworld costs one point per step, so return is maximised by the
+    shortest route. I compared tabular Q-learning and SARSA, with
+    hyperparameters tuned by Optuna, and modified the environment to add a
+    penalty for three consecutive moves in the same direction, so the
+    shortest route isn't always the safest action sequence.</p>
+  <p>The first attempt was the ambitious version: a freshly generated maze
+    every episode, aiming for a general solving strategy. It failed, for a
+    reason worth spelling out. Tabular methods key their values to exact
+    coordinates, so each new layout makes everything already learned stale.
+    Once exploration decays, the agent exploits a map that no longer exists
+    and ends up spinning in place. Tuning doesn't fix that, since it's a
+    representation problem, so the task changed to fixed mazes.</p>
+  <p>On a fixed maze both algorithms work: a 20&times;20 maze is learned in
+    around 500 episodes, and the map of maximum Q-values shows the route with
+    values rising towards the exit. SARSA needed its own tuning run. Its best
+    exploration decay came out far faster than Q-learning's (0.93 against
+    0.995), and with it SARSA reached its plateau roughly 100 to 150 episodes
+    sooner. Both settled on the same shortest path on this maze, but on
+    others SARSA occasionally matched or beat Q-learning, which shouldn't
+    happen if Q-learning had fully converged. That points at the training
+    budget as the remaining limit.</p>
+
+  <figure class="bleed plain">
+    <img src="assets/img/dungeon-qmap.webp" loading="lazy"
+         alt="A heatmap of a 20 by 20 grid, mostly dark, with a bright path of high values running from the top left to a yellow goal cell at the bottom right"
+         width="681" height="535">
+    <figcaption>Maximum Q-value per cell after training on the fixed maze.
+      The route runs from the entrance at top left to the exit at bottom
+      right, with values rising towards the goal.</figcaption>
+  </figure>
+
+  <h2>What I took from it</h2>
+  <p>Two things carried forward. Decide the selection metric before tuning
+    anything, since a model can be chosen on a number you don't actually care
+    about and be right only by coincidence. And when an algorithm fails, work
+    out whether the problem is the tuning or the representation before
+    spending more compute; the randomised-maze failure was never going to be
+    tuned away.</p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
