@@ -137,6 +137,16 @@
     hyperparameters tuned by Optuna, and modified the environment to add a
     penalty for three consecutive moves in the same direction, so the
     shortest route isn't always the safest action sequence.</p>
+
+  <figure class="bleed plain">
+    <img src="assets/img/dungeon-maze.webp" loading="lazy"
+         alt="A top-down maze of white wall blocks on a black background, with a blue triangular robot at the top left entrance and a red exit square at the bottom right"
+         width="1024" height="1024">
+    <figcaption>A 20&times;20 maze as the environment draws it. The robot
+      starts at the top left, the exit is at the bottom right, and every step
+      costs a point.</figcaption>
+  </figure>
+
   <p>The first attempt was the ambitious version: a freshly generated maze
     every episode, aiming for a general solving strategy. It failed, for a
     reason worth spelling out. Tabular methods key their values to exact
@@ -156,11 +166,12 @@
 
   <figure class="bleed plain">
     <img src="assets/img/dungeon-qmap.webp" loading="lazy"
-         alt="A heatmap of a 20 by 20 grid, mostly dark, with a bright path of high values running from the top left to a yellow goal cell at the bottom right"
+         alt="A heatmap of a 20 by 20 grid with a bright path of high values running from the top left to a yellow goal cell at the bottom right, surrounded by faint darker traces of explored corridors"
          width="681" height="535">
-    <figcaption>Maximum Q-value per cell after training on the fixed maze.
-      The route runs from the entrance at top left to the exit at bottom
-      right, with values rising towards the goal.</figcaption>
+    <figcaption>Maximum Q-value per cell after the SARSA run on its fixed
+      maze. The learned route rises towards the exit at bottom right, and the
+      darker texture around it is explored ground that got
+      penalised.</figcaption>
   </figure>
 
   <h2>What I took from it</h2>
