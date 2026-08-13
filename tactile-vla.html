@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f1f1ee">
 <title>Tactile perception in vision-language-action models - Thomas Green</title>
-<meta name="description" content="MSc research comparing three ways of encoding optical-tactile data for a pretrained vision-language-action model, evaluated on cloth folding with an ABB YuMi.">
+<meta name="description" content="MSc research adding a tactile channel to a pretrained vision-language-action model, tested on an ABB YuMi with materials that look identical to the camera.">
 <meta property="og:title" content="Tactile perception in vision-language-action models - Thomas Green">
-<meta property="og:description" content="MSc research comparing three ways of encoding optical-tactile data for a pretrained vision-language-action model, evaluated on cloth folding with an ABB YuMi.">
+<meta property="og:description" content="MSc research adding a tactile channel to a pretrained vision-language-action model, tested on an ABB YuMi with materials that look identical to the camera.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://tgreen-fe.github.io/tactile-vla.html">
 <meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
@@ -36,21 +36,21 @@
 
 <div class="wrap proj-head">
   <p class="eyebrow">Robot learning &middot; MSc dissertation</p>
-  <h1>Comparing three ways of giving a pretrained VLA access to touch</h1>
-  <p class="lede">Pretrained VLAs are trained on vision and language. There is no settled answer on how to give one a tactile signal, so I'm comparing three ways of doing it on a task where touch should matter.</p>
+  <h1>Adding touch to a pretrained vision-language-action model</h1>
+  <p class="lede">Pretrained VLAs are trained on vision and language. There's no settled way to give one a tactile signal, so I'm adding one to a pretrained model and testing whether what the robot feels changes what it does.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>MSc Robotics, University of Bristol</dd></div>
     <div><dt>Role</dt><dd>Sole author, supervised</dd></div>
     <div><dt>Period</dt><dd>June to September 2026</dd></div>
-    <div><dt>Status</dt><dd>In progress, results pending</dd></div>
+    <div><dt>Status</dt><dd>In progress, due September</dd></div>
   </dl>
 </div>
 
 <div class="wrap">
   <figure class="bleed fig-svg">
     <img src="assets/fig/vla-architecture.svg"
-         alt="RGB observation and a task instruction feed a vision-language-action backbone. An optical tactile sensor feeds the same backbone through one of three encoding strategies: as an image, as language tokens, or via a learned encoder. The backbone outputs a fold-direction selection for an ABB YuMi." width="900" height="400">
+         alt="RGB observation and a task instruction feed a vision-language-action backbone. An optical tactile sensor feeds the same backbone through one of two routes: as an image through a camera input, or as classifier probabilities appended to the state. The backbone outputs which target the ABB YuMi should reach." width="900" height="400">
     <span class="stamp fig-stamp">In progress</span>
     <figcaption>Everything is held constant except the route the tactile signal
       takes into the backbone.</figcaption>
@@ -65,47 +65,74 @@
     vision and language, because that's what there is a lot of. Touch is
     different: there's far less of it, it's sensor-specific, and it doesn't arrive in a format the backbone was built to read.</p>
   <p>So there's a choice about how to present it, and it's usually settled by convention rather than tested. You can render the
-    tactile reading as an image and push it through the vision encoder, which
-    is convenient because optical-tactile sensors produce images anyway. You
-    can describe the contact in words and let the language side carry it. Or
-    you can train a dedicated encoder and give the backbone a representation
-    built for the job.</p>
+    tactile reading as an image and give it one of the model's camera inputs,
+    which is convenient because optical-tactile sensors produce images anyway.
+    Or you can process it first and hand the backbone something smaller, in
+    this case the material probabilities from a separate classifier, appended
+    to the robot's state vector.</p>
   <p>Each has an argument for it, and the comparison is about which one a
     pretrained model can actually use.</p>
 
-  <h2>The task</h2>
-  <p>Cloth folding on an ABB YuMi, with the target being fold-direction
-    selection by material. I picked it because vision alone is not enough. Two fabrics can look near-identical and
-    behave completely differently under the gripper, and which way a fold wants
-    to go depends on properties you find out by touching. If tactile input is
-    doing anything, it should show up here.</p>
+  <h2>The task, and why it changed</h2>
+  <p>The project started on cloth folding. Two fabrics can look near-identical
+    and behave completely differently under the gripper, so folding by
+    material seemed like the natural place for touch to matter. The early
+    fine-tunes on the YuMi could produce the fold motion, but they couldn't
+    show whether any input beyond vision was steering the behaviour, and that
+    question is the whole dissertation.</p>
+  <p>So the task changed to one built to make that question answerable. The
+    materials the robot touches now look identical to the camera and differ
+    only in texture, and the instruction never says which target is correct.
+    The robot touches, then has to act on what it felt: each material sends
+    the arm to a different target. Vision can't solve this even in principle,
+    so if the policy is right more often than chance, the information came
+    through the tactile channel.</p>
 
   <figure class="bleed plain">
     <img src="assets/img/yumi-cloth.webp" loading="lazy"
          alt="An ABB YuMi dual-arm robot at the work table, with a striped child's top laid out on the surface in front of it"
          width="768" height="945">
-    <figcaption>The YuMi at the folding table. The garments are the awkward
-      part: two fabrics can look almost the same and still behave differently
-      under the gripper.</figcaption>
+    <figcaption>The YuMi at the folding table, early in the project. The
+      garments made the case for touch: two fabrics can look almost the same
+      and still behave differently under the gripper.</figcaption>
   </figure>
 
   <h2>How it is set up</h2>
   <ul class="tick">
-    <li>An optical-tactile sensor as the touch source, so the raw signal is an
-      image and all three encoding routes start from the same data.</li>
-    <li>LoRA fine-tuning on the pretrained backbone, which keeps the comparison
-      affordable and stops the base model being overwritten by a small tactile
-      dataset.</li>
-    <li>SmolVLA and OpenVLA as the candidate backbones.</li>
-    <li>Evaluation split by material, since a result that only holds on one fabric wouldn't generalise.</li>
+    <li>A GelTip-style optical tactile sensor, built for the project: a
+      silicone gel membrane over an internal camera and lights. The first
+      build leaked ambient light through the silicone, so the working version
+      sits in a sealed opaque housing.</li>
+    <li>A gate before any integration: a standalone classifier has to tell
+      the materials apart from imprints alone, evaluated across recording
+      sessions instead of random frame splits, so it can't pass by memorising
+      one session's conditions.</li>
+    <li>SmolVLA as the backbone, LoRA fine-tuned on a single consumer GPU. I
+      ran OpenVLA and &pi;0.5 on the same data early on; SmolVLA was the most
+      repeatable on this robot, so it carried the rest of the project.</li>
+    <li>More than 300 demonstration episodes on the YuMi, collected with a
+      click-to-target tool that scripts the motion and logs every episode's
+      start, target and layout alongside the frames.</li>
+    <li>Controls built into the experiment rather than added afterwards:
+      rollouts run in pairs from a fixed start, the materials swap between
+      targets so the behaviour has to follow the touch, and an ablation
+      replaces the imprint with a blank reference frame, which should erase
+      the effect.</li>
   </ul>
 
   <h2>Where it stands</h2>
-  <p>Before the comparison, I fine-tuned SmolVLA on a single consumer GPU
-    for a YuMi cloth-folding task, which convinced me the pipeline was workable at this scale. OpenVLA gave mixed results on the same problem, and
-    the reason looks like a mismatch between its discretised action
-    representation and the continuous control the arm wants. That shaped the current setup.</p>
-  <p>The comparison itself is running now. I'll put the results here when I have them.</p>
+  <p>The pieces work. The sensor is built and sealed, the classifier gate
+    passed, and language conditioning has been demonstrated on the robot: the
+    policy reaches for the target the prompt names, and physically swapping
+    the targets swaps the reach. The tactile channel is trained and has been
+    shown steering the policy live on the YuMi, with the imprint as the only
+    input that could carry the information. The blank-reference ablation
+    erases the effect, which is the check that the model is reading the
+    imprint and not something else in the pipeline.</p>
+  <p>What's left is scale and the final evaluation. I'm collecting a larger
+    dataset now and the last gates run over the coming weeks. The dissertation
+    is due in September, and I'll put the numbers here once it's
+    submitted.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>

@@ -87,8 +87,8 @@
       which isn't the same as driving straight, and it only halved the drift.</li>
     <li><b>Fused-heading correction.</b> Steering on heading instead of wheel speed,
       where the heading comes from odometry corrected by the gyro. The gyro is noisy
-      but it sees real rotation, and odometry is smooth but blind to slip. Neither
-      is usable on its own.</li>
+      but it picks up real rotation, and odometry is smooth but misses wheel slip
+      entirely. Neither is usable on its own.</li>
     <li><b>A network trained on the robot.</b> Five inputs, one hidden layer of six
       units, 43 parameters, running in a 30 ms control step on the ATmega32U4
       alongside everything else. It's first trained by copying the fused-heading
@@ -187,7 +187,7 @@
     that two mediocre heading sources fail in different ways, then combining them.
     We only saw that because we measured from outside the robot instead of trusting
     its own odometry.</p>
-  <p>The result went against our hypothesis, which is only worth much if you can
+  <p>The result went against our hypothesis, and a result like that is only worth much if you can
     point at a cause. Here the cause is visible in the odometry comparison above,
     and that's the part of the work I'd stand behind.</p>
 
