@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f1f1ee">
 <title>Tactile perception in vision-language-action models - Thomas Green</title>
-<meta name="description" content="MSc research adding a tactile channel to a pretrained vision-language-action model, tested on an ABB YuMi with materials that look identical to the camera.">
+<meta name="description" content="MSc dissertation on when a fine-tuned VLA learns to use a tactile input: four injection routes compared on an ABB YuMi, and an auxiliary head that makes all four work.">
 <meta property="og:title" content="Tactile perception in vision-language-action models - Thomas Green">
-<meta property="og:description" content="MSc research adding a tactile channel to a pretrained vision-language-action model, tested on an ABB YuMi with materials that look identical to the camera.">
+<meta property="og:description" content="MSc dissertation on when a fine-tuned VLA learns to use a tactile input: four injection routes compared on an ABB YuMi, and an auxiliary head that makes all four work.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://tgreen-fe.github.io/tactile-vla.html">
 <meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
@@ -36,103 +36,397 @@
 
 <div class="wrap proj-head">
   <p class="eyebrow">Robot learning &middot; MSc dissertation</p>
-  <h1>Adding touch to a pretrained vision-language-action model</h1>
-  <p class="lede">Pretrained VLAs are trained on vision and language. There's no settled way to give one a tactile signal, so I'm adding one to a pretrained model and testing whether what the robot feels changes what it does.</p>
+  <h1>When does fine-tuning learn to use a new modality?</h1>
+  <p class="lede">Fine-tuning a pretrained vision-language-action model on data that includes a new sensor does not guarantee the policy uses it. I added a tactile sensor to SmolVLA on an ABB YuMi, compared four ways of injecting the signal, and measured when the policy acted on it.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>MSc Robotics, University of Bristol</dd></div>
     <div><dt>Role</dt><dd>Sole author, supervised</dd></div>
     <div><dt>Period</dt><dd>June to September 2026</dd></div>
-    <div><dt>Status</dt><dd>In progress, due September</dd></div>
+    <div><dt>Status</dt><dd>Submitted September 2026</dd></div>
   </dl>
 </div>
 
 <div class="wrap">
-  <figure class="bleed fig-svg">
-    <img src="assets/fig/vla-architecture.svg"
-         alt="RGB observation and a task instruction feed a vision-language-action backbone. An optical tactile sensor feeds the same backbone through one of two routes: as an image through a camera input, or as classifier probabilities appended to the state. The backbone outputs which target the ABB YuMi should reach." width="900" height="400">
-    <span class="stamp fig-stamp">In progress</span>
-    <figcaption>Everything is held constant except the route the tactile signal
-      takes into the backbone.</figcaption>
+  <figure class="bleed plain">
+    <img src="assets/img/vla-yumi.webp"
+         alt="An ABB YuMi dual-arm robot at a steel work table. A RealSense camera is mounted on its chest and a 3D-printed optical tactile sensor is fitted in place of the left gripper. A green square and a red square sit on the table in front of it."
+         width="944" height="1135">
+    <figcaption>The ABB YuMi IRB 14000 with the egocentric RealSense D435 and
+      the lab-built optical tactile sensor in place of the left gripper. The
+      two coloured squares are the targets for the final experiment.</figcaption>
   </figure>
+
+  <div class="stats">
+    <div><span class="v">92.6%</span><span class="k">sensor classifier accuracy, four materials, leave-one-session-out</span></div>
+    <div><span class="v">0 &rarr; 4 of 4</span><span class="k">routes that conditioned on the target task, imitation alone vs with the auxiliary head</span></div>
+    <div><span class="v">24/24 &middot; 155 mm</span><span class="k">live YuMi pairs correct and mean separation, with the zero-input reference collapsed</span></div>
+  </div>
 </div>
 
 <div class="wrap prose">
 
   <h2>The question</h2>
-  <p>A vision-language-action model maps what the robot sees and what it has
-    been told into what it should do next. The pretrained ones are trained on
-    vision and language, because that's what there is a lot of. Touch is
-    different: there's far less of it, it's sensor-specific, and it doesn't arrive in a format the backbone was built to read.</p>
-  <p>So there's a choice about how to present it, and it's usually settled by convention rather than tested. You can render the
-    tactile reading as an image and give it one of the model's camera inputs,
-    which is convenient because optical-tactile sensors produce images anyway.
-    Or you can process it first and hand the backbone something smaller, in
-    this case the material probabilities from a separate classifier, appended
-    to the robot's state vector.</p>
-  <p>Each has an argument for it, and the comparison is about which one a
-    pretrained model can actually use.</p>
+  <p>A vision-language-action model maps camera images and a text
+    instruction to robot actions. The properties that decide how an object
+    should be handled, such as friction, weight and compliance, are poorly
+    read from a camera. Two fabrics can look near identical and need
+    completely different handling. Optical tactile sensors such as GelSight
+    and GelTip produce that information as an image, which makes them a
+    practical way to add touch to a model built around images.</p>
+  <p>The FuSe study found that fine-tuning a pretrained generalist policy
+    with a plain imitation loss on data that includes a new sensor leads to
+    that sensor being largely ignored. This project centres on that failure
+    mode. I wanted to know under what conditions a fine-tuned VLA conditions
+    its behaviour on an added tactile channel, and whether the way the
+    signal enters the model makes a difference.</p>
+  <p>The recent VTLA papers each pick one integration strategy: the tactile
+    image as an extra camera stream, a dedicated encoder feeding tokens, or
+    tactile converted to text. None of them compare the strategies under
+    matched conditions, so the comparisons are confounded by platform, task
+    and data. Here the four routes are run against each other with the
+    backbone, task, demonstrations and training recipe held constant.</p>
+</div>
 
-  <h2>The task, and why it changed</h2>
-  <p>The project started on cloth folding. Two fabrics can look near-identical
-    and behave completely differently under the gripper, so folding by
-    material seemed like the natural place for touch to matter. The early
-    fine-tunes on the YuMi could produce the fold motion, but they couldn't
-    show whether any input beyond vision was steering the behaviour, and that
-    question is the whole dissertation.</p>
-  <p>So the task changed to one built to make that question answerable. The
-    materials the robot touches now look identical to the camera and differ
-    only in texture, and the instruction never says which target is correct.
-    The robot touches, then has to act on what it felt: each material sends
-    the arm to a different target. Vision can't solve this even in principle,
-    so if the policy is right more often than chance, the information came
-    through the tactile channel.</p>
-
-  <figure class="bleed plain">
-    <img src="assets/img/yumi-cloth.webp" loading="lazy"
-         alt="An ABB YuMi dual-arm robot at the work table, with a striped child's top laid out on the surface in front of it"
-         width="768" height="945">
-    <figcaption>The YuMi at the folding table, early in the project. The
-      garments made the case for touch: two fabrics can look almost the same
-      and still behave differently under the gripper.</figcaption>
+<div class="wrap">
+  <figure class="bleed fig-svg">
+    <img src="assets/fig/vla-architecture.svg"
+         alt="RGB observation, task instruction and robot state feed a SmolVLA backbone. An optical tactile sensor feeds the same backbone through one of four routes: the gel image in a camera slot, class probabilities in the state vector, a classifier embedding as a token, or the material named in the prompt. An auxiliary tactile head inside the backbone predicts the material during training only. The backbone outputs a chunk of 50 end-effector deltas for the ABB YuMi." width="900" height="410">
+    <figcaption>The setup. Everything is held constant except the route the
+      tactile signal takes into the backbone. The auxiliary head is added in
+      the final experiment and discarded at inference.</figcaption>
   </figure>
+</div>
 
-  <h2>How it is set up</h2>
+<div class="wrap prose">
+
+  <h2>Getting a VLA onto the YuMi</h2>
+  <p>The YuMi does not appear in any of the cross-embodiment pre-training
+    corpora and I could find no published deployment of a VLA on one, so the
+    first job was a pipeline with no precedent to copy. The robot is driven
+    from Python through a RAPID motion server and the yumipy
+    client. Demonstrations are recorded as discrete state, action and image
+    steps with a language prompt, converted to a LeRobot dataset, and used to
+    fine-tune SmolVLA from the public smolvla_base checkpoint.
+    The action space is a 7-D end-effector delta plus gripper state.
+    Cartesian deltas are closer to the pre-training data than joint angles
+    and they make displacement a direct measure of what the policy did.</p>
+  <p>SmolVLA was chosen because it is small enough to fine-tune on a single
+    RTX 4060 Ti, which is where the project started. An eight-GPU H100 node
+    was secured later and used for the full-parameter runs.</p>
+  <p>The first fine-tune was cloth folding: 250 teleoperated episodes of
+    folding a burlap square from six starting positions. The policy
+    reproduced the descent and traverse and behaved differently across
+    prompts, which proved the pipeline end to end, but it never produced a
+    reliable fold. That held regardless of episode count or training recipe,
+    and a task without a repeatable success measure could not carry the
+    tactile comparison. The task was simplified to navigation, where the
+    policy's behaviour is read from its end-effector travel.</p>
+  <p>Two checks then established what the policy could already be steered
+    by. With 80 episodes where the prompt names a direction, the policy
+    separated left from right by 161 mm on the trained phrasings and 95 mm on
+    phrasings it had never seen. With the camera covered the separation was
+    185 mm, so the steering was coming from language. For vision, the prompt
+    named a coloured square and the policy had to find it: 10 of 18 rollouts
+    reached the correct square, all 9 paired tests moved the right way, and
+    physically swapping the squares reversed the motion. A larger set of 510
+    episodes was then used to pick a training recipe. Unfreezing the language
+    model alongside the action expert gave 71% against 54% for the action
+    expert alone, and that checkpoint became the warm start for every tactile
+    run.</p>
+
+  <h2>The sensor</h2>
+  <p>The tactile sensor is a low-cost reproduction of the GelSight Wedge: a
+    3D-printed shell, a translucent silicone gel with a grid of tracking
+    dots, one white LED and a 1080p camera module looking at the gel from
+    behind. Four materials with distinct imprints were used throughout: felt,
+    sandpaper, corduroy and a mesh.</p>
+  <p>Before any of it went near the VLA, the sensor had to pass a
+    stand-alone gate. I recorded 50 imprints per material at varied
+    orientations across two sessions, with an empty-gripper reference frame,
+    and evaluated leave-one-session-out so that a classifier could not pass
+    by memorising one session's lighting or gel condition. The first result
+    was above 99% for every method, which was too good. A mean-RGB
+    classifier on its own reached 92%, meaning the housing was leaking
+    ambient light and the materials were being told apart by the colour of
+    the room. The housing was sealed with opaque foil and the imprints
+    recollected. Mean RGB fell to 39.5%. On the sealed sensor a CNN reaches
+    92.6% leave-one-session-out accuracy (macro-F1 0.908) against 85.8% for a
+    classical pipeline, over 8 folds of 4 materials across 2 sessions.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/vla-materials.webp" loading="lazy"
+         alt="A four by four grid. Columns are felt, sandpaper, corduroy and mesh. Rows show the material photographed, the raw gel imprint with its dot grid, the reference-subtracted difference, and a contrast-amplified render where each material's texture is visible."
+         width="1600" height="1371">
+    <figcaption>The four materials, the raw gel imprint, the
+      reference-subtracted difference and the contrast-amplified render.
+      The sealed sensor tells them apart from the imprint alone.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+
+  <h2>Four routes in</h2>
+  <p>Each route uses a different surface of the model. Within a task they
+    share the same episodes, actions and recipe, so a difference between
+    routes can be attributed to the route.</p>
   <ul class="tick">
-    <li>A GelTip-style optical tactile sensor, built for the project: a
-      silicone gel membrane over an internal camera and lights. The first
-      build leaked ambient light through the silicone, so the working version
-      sits in a sealed opaque housing.</li>
-    <li>A gate before any integration: a standalone classifier has to tell
-      the materials apart from imprints alone, evaluated across recording
-      sessions instead of random frame splits, so it can't pass by memorising
-      one session's conditions.</li>
-    <li>SmolVLA as the backbone, LoRA fine-tuned on a single consumer GPU. I
-      ran OpenVLA and &pi;0.5 on the same data early on; SmolVLA was the most
-      repeatable on this robot, so it carried the rest of the project.</li>
-    <li>More than 300 demonstration episodes on the YuMi, collected with a
-      click-to-target tool that scripts the motion and logs every episode's
-      start, target and layout alongside the frames.</li>
-    <li>Controls built into the experiment rather than added afterwards:
-      rollouts run in pairs from a fixed start, the materials swap between
-      targets so the behaviour has to follow the touch, and an ablation
-      replaces the imprint with a blank reference frame, which should erase
-      the effect.</li>
+    <li><b>Camera.</b> The tactile image goes into camera slot
+      c3 and the SigLIP encoder reads it like any other view.
+      The other two slots carry the overhead camera.</li>
+    <li><b>State.</b> A four-way material vector is appended to the
+      proprioceptive state, giving an 11-dimensional state instead of 7.</li>
+    <li><b>Token.</b> The classifier's 512-dimensional embedding passes
+      through a new zero-initialised projection and joins the token sequence,
+      the same path the state vector already takes.</li>
+    <li><b>Language.</b> The material is written into the prompt as a short
+      clause.</li>
   </ul>
+  <p>Every route is trained in two variants. The clean-signal variant
+    injects the true material label and shows the most the route can carry.
+    The sensor-signal variant injects what the sensor and classifier
+    actually produce: the gel image for the camera route, the softmax for
+    state and language, the live embedding for the token.</p>
+</div>
 
-  <h2>Where it stands</h2>
-  <p>The pieces work. The sensor is built and sealed, the classifier gate
-    passed, and language conditioning has been demonstrated on the robot: the
-    policy reaches for the target the prompt names, and physically swapping
-    the targets swaps the reach. The tactile channel is trained and has been
-    shown steering the policy live on the YuMi, with the imprint as the only
-    input that could carry the information. The blank-reference ablation
-    erases the effect, which is the check that the model is reading the
-    imprint and not something else in the pipeline.</p>
-  <p>What's left is scale and the final evaluation. I'm collecting a larger
-    dataset now and the last gates run over the coming weeks. The dissertation
-    is due in September, and I'll put the numbers here once it's
-    submitted.</p>
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/vla-routes.webp" loading="lazy"
+         alt="Four panels. Camera injection: the tactile image replaces the third camera slot. State injection: a vector of class probabilities is appended to the pose vector. Token injection: tactile tokens join the text, vision and state tokens. Text injection: the prompt gains tactile descriptors."
+         width="1127" height="1278">
+    <figcaption>The four injection routes, one per input surface.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+
+  <h2>Two tasks</h2>
+  <p>The tasks were chosen to differ in how much of the demonstrated action
+    the tactile signal explains. In the direction task the material in the
+    gripper decides the whole motion: sandpaper goes left, felt right,
+    corduroy forward, mesh back, from a random start, with the prompt fixed
+    at <i>"Given the material in the gripper, move in the correct
+    direction"</i>. 80 episodes, 20 per material.</p>
+  <p>In the target task the tactile signal decides a small residual of an
+    otherwise vision-driven motion. The prompt is fixed at <i>"If holding
+    the mesh go to the green square, otherwise go to the red square"</i>,
+    the squares move between three layouts and swap order, so the policy has
+    to find them visually and the tactile channel is the only cue for which
+    one. 256 episodes, half with the mesh and the rest empty or holding
+    another material.</p>
+  <p>The measure is mean separation in millimetres between the end-effector
+    stopping points: left against right for the direction task, along the
+    axis between the squares for the target task. Every arm is scored
+    against a zero-input reference, the same checkpoint with the tactile
+    input blanked, and against a control trained with the input zeroed
+    throughout. If the tactile run separates and the reference collapses,
+    the policy was reading the tactile input. If the control separates as
+    well, there was some other cue in the scene. Policies were evaluated
+    offline on held-out episodes and then live on the YuMi in matched pairs
+    that differ only in the material in the gripper, with a sign-flip test
+    at <i>p</i> &lt; 0.05 and a pass bar of 30 mm.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/vla-tasks.webp" loading="lazy"
+         alt="Two diagrams. Left, the direction task: from the gripper, arrows point to sandpaper on the left, felt on the right, corduroy forward and mesh back. Right, the target task: the gripper faces a green square and a red square, and the prompt says to go to the green square if holding the mesh, otherwise the red."
+         width="1600" height="857">
+    <figcaption>The two tasks. Left, material decides the direction of
+      motion. Right, material decides which of two squares to approach and
+      vision does the rest.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+
+  <h2>Direction task: every route conditions</h2>
+  <p>Eight policies, three seeds each. With the clean signal every route
+    conditions to a similar degree: 171 mm through the camera slot, 171 mm
+    through the state vector, 176 mm through the token and 177 mm through the
+    prompt, with four-way accuracy at 99 to 100%. The 24 zero-input
+    references all fall between &minus;5 and +9 mm.</p>
+  <p>With the sensor signal the routes split. State and language stay at
+    172 mm and 179 mm with 100% accuracy, since they receive the classifier's
+    prediction directly. The camera route with the raw gel image drops to
+    85 mm at 65%, and the token route with the live embedding to 76 mm at
+    73%. All four clear the 30 mm bar on every seed.</p>
+  <p>The clean-signal camera policy was then run on the robot from 20
+    random starts with the material rendered into its slot. Every run went
+    the demonstrated direction, 21 of 21, and the left-against-right
+    separation was 182 mm against 171 mm offline. The offline separation
+    carries to the robot without loss.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/vla-dir-sep.webp" loading="lazy"
+           alt="Bar chart of left-against-right separation in millimetres for the four routes, clean signal and sensor signal. Clean bars are all around 171 to 177 mm. Sensor bars are 85 mm for camera, 172 for state, 76 for tokens and 179 for language. Grey zero-input reference bars sit near zero. A dashed line marks the 30 mm bar."
+           width="665" height="482">
+      <figcaption>Direction task offline. Solid is clean signal, hatched is
+        sensor signal, grey is the zero-input reference. Three seeds per
+        arm, 20 trials per material.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/vla-dir-live.webp" loading="lazy"
+           alt="Top-down plot of 21 live end-effector paths from a shared origin, coloured by material. Sandpaper runs go left, felt right, corduroy forward and mesh back, forming four distinct lobes."
+           width="625" height="562">
+      <figcaption>Live direction task, camera route. Paths relative to each
+        run's start, coloured by material. 182 mm separation, n = 21,
+        p = 0.001.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+
+  <h2>Target task: nothing conditions under imitation alone</h2>
+  <p>The same eight policies were trained on the target task, warm-started
+    from the vision-conditioned checkpoint, plus a control. Every mean
+    separation fell between &minus;11 and +3 mm. Clean signal and sensor
+    signal came out almost identical, the zero-input references sat in the
+    same band, and the control gave &minus;3 mm. The tactile policies could
+    not be told apart from the same policy with its input removed or from a
+    policy that never had one.</p>
+  <p>In trajectory form the null is an upward fan: the same forward motion
+    whatever the gripper holds, with no consistent movement towards either
+    square. The sensor-signal camera policy was run live in 16 matched pairs
+    and produced the same fan, &minus;37 mm along the target axis with 6 of 16
+    pairs positive. The policy that had been steered by colour a few weeks
+    earlier had stopped tracking the squares at all.</p>
+  <p>The training losses explain it. Every plain-imitation run, control
+    included, finishes at a loss of 0.060, and the clean-signal and
+    sensor-signal variants of a route finish identical to four decimal
+    places on the same seed. The tactile channel decides only which square,
+    a small share of the action variance, so a policy that ignores it and
+    reaches the same way every time loses almost nothing on the imitation
+    objective. The gradient that would push it to read the imprint is
+    swamped by the gradient for the reach that both squares share.</p>
+
+  <h2>An auxiliary head fixes it</h2>
+  <p>Varying the prompt and the recipe did not help, so the objective was
+    changed. A single linear layer with a sigmoid was attached to the action
+    expert's feature vector and trained to predict whether the gripper holds
+    the mesh, with its binary cross-entropy added to the imitation loss at a
+    weight of 0.1. The head is dropped at inference. Its only job is to give
+    the tactile information a gradient of its own during training.</p>
+  <p>With the head in place the target task was repeated with the same
+    data, recipe, warm start and measures. Every route now conditions. With
+    the clean signal the separations are +142 mm through the camera slot,
+    +143 mm through the state, +103 mm through the token and +151 mm through
+    the prompt. With the sensor signal they are +95, +148, +118 and +144 mm.
+    The zero-input references collapse to between &minus;16 and +18 mm, and
+    the control gives +9 mm, so the head on its own does nothing and the
+    separation is coming from the tactile input.</p>
+  <p>The loss moved from 0.060 to 0.059 for the camera, state and language
+    routes on every seed. That bounds the imitation component the head
+    recovered at around 2%, which is the share of the demonstrated action
+    that touch resolves. It was enough to condition the policy on every
+    route.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/vla-target-null.webp" loading="lazy"
+           alt="Top-down plot of offline rollouts from a fixed start with a green square outlined at the top left and a red square at the bottom left. Green mesh paths and red empty-gripper paths both fan forward and upward together, with no separation."
+           width="519" height="625">
+      <figcaption>Target task, camera route, imitation alone. Mesh runs in
+        green and empty-gripper runs in red. Mean separation &minus;8 mm
+        over 24 pairs.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/vla-target-aux.webp" loading="lazy"
+           alt="The same plot with the auxiliary head. Green paths now bend towards the green square and red paths towards the red square, forming two separate bundles."
+           width="519" height="625">
+      <figcaption>Same layout, same seed, with the auxiliary head. Mean
+        separation +142 mm over 24 pairs, p &lt; 10<sup>&minus;4</sup>,
+        reference +7 mm.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <p>The camera-route policy with the sensor signal and the head was then
+    run live in 24 matched pairs across three blocks, with the squares moved
+    and swapped between blocks. Every pair separated in the correct
+    direction, 24 of 24, with a mean separation of +155 mm against +149 mm
+    offline. The mesh runs reached the green square in 24 of 24 trials and
+    the empty-gripper runs reached the red in 18 of 24. Five of the six
+    misses were in the third block, where a ripple in the gel from repeated
+    clamping was being read as mesh and the empty-gripper runs stopped short
+    between the squares.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/vla-aux-sep.webp" loading="lazy"
+           alt="Bar chart of pair separation in millimetres with the auxiliary head. Clean signal bars: camera 142, state 143, tokens 131, language 151. Sensor signal bars: 95, 148, 118, 144. Zero-input references and the trained control sit near zero. The 30 mm bar is marked."
+           width="665" height="482">
+      <figcaption>Target task with the auxiliary head, offline. Solid is
+        clean signal, hatched is sensor signal, grey is the zero-input
+        reference. 24 matched pairs per arm, three seeds.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/vla-aux-live.webp" loading="lazy"
+           alt="Top-down plot of live paths from a fixed start. Green mesh paths reach the green square at the top and red empty-gripper paths reach the red square at the bottom."
+           width="532" height="625">
+      <figcaption>Live target task, camera route with the sensor signal and
+        the head, second block. +200 mm on this block, +155 mm over all 24
+        pairs.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+
+  <h2>What it means</h2>
+  <p>Whether a fine-tuned VLA uses a new input depends on how much of the
+    demonstrated action that input explains. When touch decided the whole
+    motion, every route conditioned under plain imitation. When touch decided
+    a residual of a motion that vision and language mostly determined, no
+    route conditioned, and the policy reproduced the FuSe failure on a
+    different model and robot. The failure is task dependent, and it is
+    likely whenever the added modality has a small effect on the output.</p>
+  <p>The auxiliary head works by making the material a training target in
+    its own right, so the tactile channel gets a gradient that does not
+    depend on its share of the action loss. The control shows that adding
+    the head is not what conditions the policy. The head needs a tactile
+    input to act on, and zeroing that input at test time collapses every
+    route to within &minus;16 and +18 mm.</p>
+  <p>With the clean signal all four routes perform alike, so under matched
+    conditions the choice of route matters less than the training objective.
+    With the sensor signal the routes stop being directly comparable, because
+    each is handed a different representation: the state and language routes
+    get the classifier's prediction, the token route gets its embedding, and
+    the camera route has to read the raw gel image itself.</p>
+
+  <h2>Limitations and what comes next</h2>
+  <ul class="tick">
+    <li>The head predicts a binary label, mesh or not, or a four-way class.
+      It helps on tasks where the useful tactile information is which
+      material is held. A continuous signal such as shear or contact area
+      would need a regression head and a different loss, and testing whether
+      the same mechanism holds when the signal varies within an episode is
+      the next experiment.</li>
+    <li>The 3D-printed gripper deformed under repeated clamping and needed
+      recalibrating between sessions, and the gel picked up a ripple that
+      cost trials in the final block. A more rigid mount and the opaque
+      housing from the start are the first hardware changes.</li>
+    <li>The folding task was set aside because the fold itself was not
+      repeatable. With the head in place the next step is a fold where touch
+      confirms the grasp before each lift, with the head predicting grasp
+      state.</li>
+    <li>Every fine-tune here was on an embodiment the model had never seen,
+      so the action expert was learning the YuMi and the tactile channel at
+      the same time. Mounting the sensor on an arm that is in SmolVLA's
+      pre-training data, such as the SO-101, would leave the motion priors
+      intact and spend the fine-tuning budget on touch alone.</li>
+  </ul>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>
