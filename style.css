@@ -261,6 +261,7 @@ article .prose ul.tick { margin-inline: auto; }
   padding: 0.3rem 0.5rem;
 }
 .fig-stamp { position: absolute; top: 0.9rem; right: 0.9rem; }
+.stamp-done { color: #1e6b3a; border-color: #1e6b3a; background: #e9f4ec; }
 
 .stamp-404 {
   position: static; display: inline-block;
