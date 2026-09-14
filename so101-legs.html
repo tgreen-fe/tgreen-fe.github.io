@@ -39,13 +39,14 @@
   <h1>Open-source legs for the SO-101 motor set</h1>
   <p class="lede">The SO-101 made a capable robot arm something anyone can print
     and build at home. There is no equivalent for a bipedal lower body, so I'm
-    designing one around the same motors.</p>
+    designing one around the same motors. This is a work in progress: the
+    CAD is still changing and nothing has walked yet.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>Personal project</dd></div>
     <div><dt>Role</dt><dd>Sole author</dd></div>
     <div><dt>Period</dt><dd>August 2026 onwards</dd></div>
-    <div><dt>Status</dt><dd>In progress, CAD and first prints</dd></div>
+    <div><dt>Status</dt><dd>In progress. CAD iterating, first parts printed, no assembly yet</dd></div>
   </dl>
 </div>
 
@@ -62,10 +63,11 @@
 
   <figure class="bleed plain">
     <img src="assets/img/so101-legs-parts.webp" loading="lazy"
-         alt="Isometric render of the eight current printed parts of one leg laid out on a grid: pelvis, hip yaw, hip roll, hip pitch, upper leg, knee collar, lower leg and foot, in light grey."
+         alt="Isometric render of the seven current printed parts of one leg laid out on a grid: pelvis, hip yaw, combined hip roll and pitch module, upper leg, knee collar, lower leg and foot, in light grey."
          width="1440" height="810">
-    <figcaption>The part set for one leg, rendered from the STLs in the
-      repository.</figcaption>
+    <figcaption>The current part set for one leg, rendered from the STLs in
+      the repository. Hip roll and pitch share one printed module. Expect
+      these to change.</figcaption>
   </figure>
 </div>
 
@@ -93,10 +95,11 @@
   </ul>
 
   <h2>Where it is</h2>
-  <p>Five joints per leg are designed in SolidWorks: hip yaw, hip roll, hip
-    pitch, knee and ankle, plus the pelvis and torso that join the two sides.
-    The hip and pelvis parts have been printed as a single plate and the
-    remaining parts are on their second revision. Once the hardware stands and
+  <p>Five joints per leg are designed in SolidWorks: hip yaw, hip roll and
+    pitch in one module, knee and ankle, plus the pelvis and torso that join
+    the two sides. The hip and pelvis parts have been printed as a single
+    plate and the remaining parts are on their second revision. None of it is
+    final. Once the hardware stands and
     holds a pose, the plan is control software, then using the platform to
     collect demonstration data for a learned policy, leaning on sim-to-real
     where it helps.</p>
