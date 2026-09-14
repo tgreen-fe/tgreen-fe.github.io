@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f1f1ee">
+<title>SO-101 Legs - Thomas Green</title>
+<meta name="description" content="Open-source 3D-printable humanoid legs built on the same STS3215 servos as an SO-101 leader/follower arm pair.">
+<meta property="og:title" content="SO-101 Legs - Thomas Green">
+<meta property="og:description" content="Open-source 3D-printable humanoid legs built on the same STS3215 servos as an SO-101 leader/follower arm pair.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/so101-legs.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">Thomas Green</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Legged robotics &middot; Open hardware</p>
+  <h1>Open-source legs for the SO-101 motor set</h1>
+  <p class="lede">The SO-101 made a capable robot arm something anyone can print
+    and build at home. There is no equivalent for a bipedal lower body, so I'm
+    designing one around the same motors.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>Personal project</dd></div>
+    <div><dt>Role</dt><dd>Sole author</dd></div>
+    <div><dt>Period</dt><dd>August 2026 onwards</dd></div>
+    <div><dt>Status</dt><dd>In progress, CAD and first prints</dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/so101-legs-parts.webp"
+         alt="Isometric render of the eight current printed parts of one leg laid out on a grid: pelvis, hip yaw, hip roll, hip pitch, upper leg, knee collar, lower leg and foot, in light grey."
+         width="1440" height="810">
+    <span class="stamp fig-stamp">In progress</span>
+    <figcaption>The current part set for one leg, rendered from the STLs in
+      the repository. Each joint is a Feetech STS3215 in a printed housing.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+
+  <h2>Why</h2>
+  <p>The SO-101 arm has been adopted widely because it is cheap, printable and
+    uses one motor type throughout. Legs on that model don't exist yet: open
+    bipeds either use expensive actuators or aren't designed to be printed at
+    home. I want a lower body that someone with an SO-101 leader/follower kit
+    can build from the motors they already have, then use for learning
+    bipedal control.</p>
+
+  <h2>Constraints</h2>
+  <ul>
+    <li>Same actuators as an SO-101 follower/leader pair, the Feetech STS3215
+      serial bus servo. That fixes the torque and speed budget, and the design
+      has to live within it rather than reach for better motors.</li>
+    <li>Fully 3D-printable structure on a consumer FDM printer. No machined
+      parts.</li>
+    <li>Carries the two SO-101 control boards and, optionally, a battery. It
+      can also run tethered.</li>
+    <li>A light printed torso to mount an IMU, with foot force sensing
+      planned.</li>
+  </ul>
+
+  <h2>Where it is</h2>
+  <p>Five joints per leg are designed in SolidWorks: hip yaw, hip roll, hip
+    pitch, knee and ankle, plus the pelvis and torso that join the two sides.
+    The hip and pelvis parts have been printed as a single plate and the
+    remaining parts are on their second revision. Once the hardware stands and
+    holds a pose, the plan is control software, then using the platform to
+    collect demonstration data for a learned policy, leaning on sim-to-real
+    where it helps.</p>
+
+  <p>The CAD source, STLs and servo model are in the repository under
+    CC&nbsp;BY-SA&nbsp;4.0.</p>
+
+  <p><a href="https://github.com/tgreen-fe/so101-legs">github.com/tgreen-fe/so101-legs</a></p>
+
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+</body>
+</html>
