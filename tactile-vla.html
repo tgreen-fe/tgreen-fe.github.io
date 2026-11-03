@@ -36,7 +36,7 @@
 
 <div class="wrap proj-head">
   <p class="eyebrow">Robot learning &middot; MSc dissertation</p>
-  <h1>When does fine-tuning learn to use a new modality?</h1>
+  <h1>Tactile sensing in a vision-language-action model</h1>
   <p class="lede">My MSc dissertation. I added an optical tactile sensor to SmolVLA on an ABB YuMi, compared four ways of feeding the touch signal into the model, and measured when the fine-tuned policy acted on it.</p>
 
   <dl class="meta">
@@ -235,7 +235,7 @@
 
 <div class="wrap prose">
 
-  <h2>Direction task: every route works</h2>
+  <h2>Direction task results</h2>
   <p>Eight policies with three seeds each. With the clean signal the
     separations were 171 mm (camera), 171 mm (state), 176 mm (token) and
     177 mm (language), with four-way accuracy of 99 to 100%. All 24
@@ -271,7 +271,7 @@
 
 <div class="wrap prose">
 
-  <h2>Target task: no route works under imitation alone</h2>
+  <h2>Target task results, imitation only</h2>
   <p>The same eight policies plus a control were trained on the target task
     from the vision-conditioned checkpoint. Every mean separation fell
     between &minus;11 and +3 mm. Clean and sensor signals gave almost the same
@@ -287,7 +287,7 @@
     which square, a small share of the action, so a policy that ignores it
     loses almost nothing on the imitation loss.</p>
 
-  <h2>Adding an auxiliary tactile head</h2>
+  <h2>Target task results with an auxiliary tactile head</h2>
   <p>Changing the prompt and the recipe did not help, so I changed the
     training objective. A single linear layer with a sigmoid reads the action
     expert's features and predicts whether the gripper holds the mesh. Its

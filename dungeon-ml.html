@@ -70,7 +70,7 @@
     from images, recovers the species from the damaged table, and learns the
     maze.</p>
 
-  <h2>Friend or foe from sprites</h2>
+  <h2>Sprite classification</h2>
   <p>The image set is skewed. Humans are 40 per cent of it and the rarest
     class, the winged rat, 7 per cent. Before training, I tested features to
     help the rare class: per-class colour profiles, entity size and HOG shape
@@ -96,7 +96,7 @@
       are lizards classed as orcs.</figcaption>
   </figure>
 
-  <h2>Species from a damaged table</h2>
+  <h2>Clustering a damaged attribute table</h2>
   <p>The sensor table has ten attributes per entity. Only 500 of its 10,000
     species labels survive. I used clustering and held back the surviving
     labels to check the result. Missing values were filled with each
@@ -124,7 +124,7 @@
       survives.</figcaption>
   </figure>
 
-  <h2>Learning the maze</h2>
+  <h2>Reinforcement learning in the maze</h2>
   <p>The gridworld costs one point per step, so the shortest route maximises
     return. I compared tabular Q-learning and SARSA, with hyperparameters
     tuned by Optuna. I added a penalty for three consecutive moves in the
