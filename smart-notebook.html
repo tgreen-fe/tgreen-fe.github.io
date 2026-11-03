@@ -153,9 +153,8 @@
 
 <div class="wrap prose">
   <h2>The amplifier board</h2>
-  <p>I generated the PCBs in Python, writing the Gerber files directly, with
-    my own autorouter and design-rule checks. I made three variants and had
-    the compact through-hole one (98 &times; 69 mm) built by JLCPCB.</p>
+  <p>I designed three variants of the amplifier PCB and had the compact
+    through-hole one (98 &times; 69 mm) built by JLCPCB.</p>
   <p>I also wrote a separate checker, <code>verify_gerber.py</code>, that
     rebuilds the copper connections from the Gerber files and compares them
     with the circuit netlist. It found a wrong Teensy pin order in all three
