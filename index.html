@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f1f1ee">
 <title>Thomas Green - Robotics Engineer</title>
-<meta name="description" content="AI/Data Engineer at the FIA Formula E World Championship and MSc Robotics student. Selected projects, with results and source.">
+<meta name="description" content="Robotics engineer, based in Vancouver from January 2027. MSc Robotics, University of Bristol. Selected projects with results and source.">
 <meta property="og:title" content="Thomas Green - Robotics Engineer">
-<meta property="og:description" content="AI/Data Engineer at the FIA Formula E World Championship and MSc Robotics student. Selected projects, with results and source.">
+<meta property="og:description" content="Robotics engineer, based in Vancouver from January 2027. MSc Robotics, University of Bristol. Selected projects with results and source.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tgreen-fe.github.io/">
 <meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
@@ -39,12 +39,15 @@
     <p class="kicker">Robotics hardware &middot; Applied machine learning</p>
     <h1>Thomas Green</h1>
     <p class="lede">
-      I am an <b>AI/Data Engineer at the FIA Formula E World Championship</b>
-      and an <b>MSc Robotics student</b>. Most recently that has meant a
-      dissertation investigating the integration of tactile feedback into
-      vision-language-action models, building prediction and simulation
-      tooling for the Formula E World Championship, and a soft robot that
-      installs fibre-optic cable through buried ducting.
+      I&rsquo;m a robotics engineer based in Vancouver from January 2027.
+      I&rsquo;ve written several technical reports and papers, most recently on
+      incorporating tactile feedback into vision-language-action models.
+      I&rsquo;m currently an AI and Data Engineer at Formula E, building race
+      telemetry pipelines, live prediction models and simulation software.
+      Before that I spent two years on a range of technology innovation
+      placements in the telecommunications industry, in Zurich and London. The
+      project I&rsquo;m proudest of from that time is a soft vine robot that
+      installs fibre-optic cable through buried duct.
     </p>
     <ul class="facts">
       <li><b>MSc Robotics</b><span>University of Bristol</span></li>
@@ -70,12 +73,12 @@
         <a class="card-hit" href="tactile-vla.html">
           <div class="card-shot">
             <img src="assets/img/yumi-cloth.webp" alt="An ABB YuMi dual-arm robot at a work table with a striped child's top laid out in front of it" loading="lazy" width="768" height="945">
-            <span class="stamp">In progress</span>
+            <span class="stamp">Submitted</span>
           </div>
           <div class="card-body">
-            <p class="card-meta"><span>Manipulation</span><span class="drg">TG-001</span></p>
+            <p class="card-meta"><span>Robot learning</span><span class="drg">TG-001</span></p>
             <h3>Tactile perception in VLA models</h3>
-            <p>MSc research adding a tactile channel to a pretrained VLA, tested on an ABB YuMi with materials that look identical to the camera.</p>
+            <p>MSc dissertation on when a fine-tuned VLA uses an added tactile input. Four injection routes compared on an ABB YuMi.</p>
           </div>
         </a>
       </li>
@@ -87,24 +90,23 @@
           <div class="card-body">
             <p class="card-meta"><span>Soft robotics</span><span class="drg">TG-002</span></p>
             <h3>Soft vine robot for fibre installation</h3>
-            <p>A robot that grows along buried ducting to pull fibre-optic cable, now in production and testing after field trials.</p>
+            <p>A soft robot that grows along buried duct to pull in fibre-optic cable, taken from first prototype to field trials.</p>
           </div>
         </a>
       </li>
 
-      <!-- Placeholder: no write-up yet, so the card is deliberately inert. -->
-      <li class="card is-placeholder">
-        <div class="card-hit">
+      <li class="card">
+        <a class="card-hit" href="so101-legs.html">
           <div class="card-shot">
-            <img src="assets/img/mujoco-card.webp" alt="A MuJoCo simulation: a yellow six-axis robot arm with an open two-finger gripper poised above a green cube on a dark tiled floor" loading="lazy" width="720" height="405">
+            <img src="assets/img/so101-legs-card-v3.webp" alt="MuJoCo render of a pair of orange 3D-printed humanoid legs with black servos at the hips, knees and ankles, standing on a blue checked floor" loading="lazy" width="800" height="600">
             <span class="stamp">In progress</span>
           </div>
           <div class="card-body">
-            <p class="card-meta"><span>Sim-to-real</span><span class="drg">TG-003</span></p>
-            <h3>Sim-to-real transfer on a manipulator</h3>
-            <p>Coming soon&hellip;</p>
+            <p class="card-meta"><span>Legged robotics</span><span class="drg">TG-003</span></p>
+            <h3>Humanoid legs from an SO-101 kit</h3>
+            <p>Printable legs that reuse the servos and boards from an SO-101 arm kit. Version 3 designed and simulated in MuJoCo.</p>
           </div>
-        </div>
+        </a>
       </li>
 
       <li class="card">
@@ -123,7 +125,7 @@
       <li class="card">
         <a class="card-hit" href="lap-simulation.html">
           <div class="card-shot contain">
-            <img src="assets/fig/lapsim-card.svg" alt="Three-stage pipeline from city-map geometry through lap simulation to a design read-out" loading="lazy" width="900" height="506">
+            <img src="assets/fig/lapsim-card.svg" alt="Pipeline: circuit geometry from city maps, lap simulation with a Gen3 powertrain model, and a design read-out of lap time, energy and overtaking" loading="lazy" width="900" height="506">
           </div>
           <div class="card-body">
             <p class="card-meta"><span>Simulation</span><span class="drg">TG-005</span></p>
@@ -136,7 +138,7 @@
       <li class="card">
         <a class="card-hit" href="race-prediction.html">
           <div class="card-shot contain">
-            <img src="assets/fig/prediction-card.svg" alt="Three-stage pipeline from live race state through engineered features to a win probability" loading="lazy" width="900" height="506">
+            <img src="assets/fig/prediction-card.svg" alt="Pipeline: live race state from timing and telemetry, engineered features, and a win probability shown on the world feed" loading="lazy" width="900" height="506">
           </div>
           <div class="card-body">
             <p class="card-meta"><span>Applied ML</span><span class="drg">TG-006</span></p>
@@ -188,12 +190,13 @@
       <li class="card">
         <a class="card-hit" href="smart-notebook.html">
           <div class="card-shot">
-            <img src="assets/img/notebook-internals.webp" alt="The hollowed-out back cover of a notebook holding a battery, a Raspberry Pi Pico and an e-paper driver board" loading="lazy" width="1230" height="875">
+            <img src="assets/img/notebook-card-pcb.webp" alt="A hand-soldered green amplifier board with rows of resistors, four amplifier chips and a Teensy 4.1 along one edge" loading="lazy" width="800" height="600">
+            <span class="stamp">In progress</span>
           </div>
           <div class="card-body">
             <p class="card-meta"><span>Embedded</span><span class="drg">TG-010</span></p>
-            <h3>E-paper summaries in a notebook cover</h3>
-            <p>An e-paper display built into the cover of a hardback notebook, driven by a Pico, summarising the handwritten pages inside it.</p>
+            <h3>A paper notebook that reads what I write</h3>
+            <p>Capturing handwriting with no change to the pen or paper: sound-based recognition, a piezo array on a custom PCB, and an e-paper cover.</p>
           </div>
         </a>
       </li>
@@ -231,8 +234,8 @@
 <section id="more">
   <div class="wrap">
     <h2>Other projects</h2>
-    <p class="lede">See my other projects (mostly smaller and for my own use),
-      on my GitHub profile.</p>
+    <p class="lede">Smaller projects, mostly built for my own use, are on my
+      GitHub profile.</p>
     <p class="gh-link"><a href="https://github.com/tgreen-fe">github.com/tgreen-fe &rarr;</a></p>
   </div>
 </section>
@@ -249,7 +252,7 @@
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>Thomas Green &middot; London, UK</span>
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
     <span class="set">
       <a href="mailto:tbbgreen@gmail.com">Email</a>
       <a href="https://github.com/tgreen-fe">GitHub</a>

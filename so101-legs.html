@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f1f1ee">
+<title>SO-101 Legs - Thomas Green</title>
+<meta name="description" content="Humanoid legs that reuse the servos and boards from an SO-101 arm kit, with a printed structure. Version 3 designed and simulated in MuJoCo.">
+<meta property="og:title" content="SO-101 Legs - Thomas Green">
+<meta property="og:description" content="Humanoid legs that reuse the servos and boards from an SO-101 arm kit, with a printed structure. Version 3 designed and simulated in MuJoCo.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tgreen-fe.github.io/so101-legs.html">
+<meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">Thomas Green</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="./#projects">Projects</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+      <a href="./#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<article>
+
+<div class="wrap proj-head">
+  <p class="eyebrow">Legged robotics &middot; Open hardware</p>
+  <h1>Humanoid legs from an SO-101 kit</h1>
+  <p class="lede">The SO-101 arm made a capable robot arm cheap enough to print and build at home. I'm designing a pair of humanoid legs that reuse the same parts: the STS3215 servos and control boards from an SO-101 leader and follower kit, with a 3D-printed structure. Work in progress.</p>
+
+  <dl class="meta">
+    <div><dt>Context</dt><dd>Personal project</dd></div>
+    <div><dt>Role</dt><dd>Sole author</dd></div>
+    <div><dt>Period</dt><dd>August 2026 onwards</dd></div>
+    <div><dt>Status</dt><dd>Version 3 designed and simulated in MuJoCo, not yet assembled</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/tgreen-fe/so101-legs">so101-legs</a></dd></div>
+  </dl>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/so101-legs-v3-iso.webp"
+         alt="MuJoCo render of the version 3 legs standing on a checked floor: an orange printed pelvis box carrying two legs, each with a black STS3215 servo at the hip, knee and ankle, on flat orange feet."
+         width="1400" height="1050">
+    <figcaption>Version 3 in MuJoCo, built from the SolidWorks exports. Orange
+      is printed, black is the STS3215 servos.</figcaption>
+  </figure>
+
+  <div class="stats">
+    <div><span class="v">8</span><span class="k">STS3215 servos, all from one SO-101 leader and follower kit</span></div>
+    <div><span class="v">4</span><span class="k">joints per leg in version 3: hip yaw, hip pitch, knee, ankle</span></div>
+    <div><span class="v">1.05 kg</span><span class="k">estimated total mass from the CAD</span></div>
+  </div>
+</div>
+
+<div class="wrap prose">
+
+  <h2>Aim</h2>
+  <p>The SO-101 arm is widely used because it is cheap, printable and uses
+    one motor type throughout. I could not find an equivalent for a bipedal
+    lower body. Open bipeds either use expensive actuators or are not
+    designed to be printed at home.</p>
+  <p>The main constraint is to reuse the SO-101 package. Someone with a
+    leader and follower kit should be able to build the legs from the parts
+    they already have, then use them to learn bipedal control and collect
+    training data for learned policies.</p>
+  <ul class="tick">
+    <li>Only Feetech STS3215 servos from an SO-101 kit. This fixes the torque
+      and speed available, and the design has to work within it.</li>
+    <li>Fully printable on a consumer FDM printer, with no machined
+      parts.</li>
+    <li>Carries the SO-101 control boards and optionally a battery, or runs
+      tethered.</li>
+    <li>A light printed torso for an IMU, with foot force sensing
+      planned.</li>
+  </ul>
+
+  <h2>Servo allocation</h2>
+  <p>Version 3 uses 8 of the servos in a leader and follower kit. The six
+    follower servos (12 V, 1/345 gearing, about 2.9 Nm stall) drive the hip
+    pitch, knee and ankle joints. The two hip yaw joints use a matched pair of
+    leader servos (7.4 V, 1/191 gearing). The
+    remaining leader servos are spares.</p>
+
+  <h2>Version 3</h2>
+  <p>Version 2 had five joints per leg, with hip roll and pitch in one printed
+    module. For version 3 I made the feet smaller, gave the knee more range,
+    shortened the lower leg and moved the legs closer together. To bring the
+    legs closer I took out the hip roll joint for a first test, leaving hip
+    yaw, hip pitch, knee and ankle pitch on each leg.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/so101-legs-v3-front.webp" loading="lazy"
+           alt="Front view of the version 3 legs in MuJoCo. The pelvis box holds the two hip yaw servos, and each leg has servos at the hip, knee and ankle, all pitching forward and back."
+           width="800" height="767">
+      <figcaption>Front view. Without hip roll, every joint below the yaw
+        pitches forward and back.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/so101-legs-v3-side.webp" loading="lazy"
+           alt="Side view of the version 3 legs in MuJoCo in a crouched pose, with the hip, knee and ankle bent."
+           width="626" height="800">
+      <figcaption>Side view in the crouched home pose.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+
+  <h2>Simulation</h2>
+  <p>I built a MuJoCo model straight from the CAD. Each link is exported from
+    SolidWorks as its own STL, and a script does the rest:</p>
+  <ul class="tick">
+    <li>finds each joint axis from the servo horn geometry in the
+      meshes</li>
+    <li>estimates link mass from mesh volume, assuming 20% infill PLA plus
+      55 g per servo</li>
+    <li>sweeps each joint until parts collide and sets the limit 5&deg; short
+      of contact</li>
+    <li>mirrors the right leg from the left and writes the model file</li>
+  </ul>
+  <p>When the CAD changes, the model rebuilds with one command. It has
+    position actuators with a torque limit per motor, an IMU on the pelvis, a
+    touch sensor under each foot, and joint position sensing. The sweep gave
+    hip pitch &minus;80&deg; to +110&deg;, knee &minus;26&deg; to +150&deg;,
+    ankle &minus;93&deg; to +98&deg; and hip yaw &minus;11&deg; to +9&deg;.
+    Yaw is limited by the hip bracket hitting the pelvis wall at about
+    14&deg;.</p>
+
+  <h2>Removing hip roll</h2>
+  <p>The simulation showed that version 3 cannot balance sideways. Every joint
+    except yaw is a pitch joint, so nothing can shift the body over one foot.
+    The centre of mass sits on the centre line, 18 mm inside the inner edge of
+    each foot. When one foot lifts, the robot tips towards it and has no joint
+    to catch itself. Finding this in simulation meant no parts were printed
+    for a design that could not stand on one leg.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
+    <img src="assets/img/so101-legs-v3-tip.webp" loading="lazy"
+         alt="Four frames from a MuJoCo run. The legs stand level, then the left foot lifts off the floor, and the pelvis tilts and the robot tips towards the lifted side."
+         width="2800" height="600">
+    <figcaption>Lifting one foot in MuJoCo. With no roll joint, the robot tips
+      towards the lifted side within about half a second.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <p>There are three options I'm weighing:</p>
+  <ul class="tick">
+    <li>Put a roll joint back, at the hip or the ankle, and test it in
+      simulation before changing the CAD. This uses one more servo per leg,
+      and the kit has spares.</li>
+    <li>Reshape the feet so one foot can reach under the centre of
+      mass.</li>
+    <li>Keep version 3 and see whether a reinforcement learning policy can
+      find a rocking gait.</li>
+  </ul>
+
+  <h2>Next</h2>
+  <p>After the balance fix: update the CAD and rebuild the model, tune the
+    actuator parameters against real servos (stiffness, damping and friction
+    are estimates for now), match the simulation zero to the servo centre
+    position, and develop a gait. I plan to train the gait with reinforcement
+    learning in MuJoCo, since that fits the sim-to-real and data collection
+    goals. Then print and assemble.</p>
+  <p>The version 2 CAD, STLs and servo model are in the repository under
+    CC&nbsp;BY-SA&nbsp;4.0. Version 3 and the MuJoCo model will follow.</p>
+  <p><a href="https://github.com/tgreen-fe/so101-legs">github.com/tgreen-fe/so101-legs</a></p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/so101-legs-render.webp" loading="lazy"
+           alt="SolidWorks render of the version 2 leg assembly: a pelvis block carrying two hip modules, two legs with a servo at each of the five joints, standing on flat oval feet."
+           width="1098" height="1110">
+      <figcaption>Version 2 in SolidWorks, with five joints per leg including
+        hip roll.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/so101-legs-parts.webp" loading="lazy"
+           alt="Render of the version 2 printed parts for one leg laid out on a grid: pelvis, hip yaw, combined hip roll and pitch module, upper leg, knee collar, lower leg and foot."
+           width="1440" height="810">
+      <figcaption>The version 2 printed parts for one leg.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <a class="back" href="./#projects">&larr; All projects</a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
+    <span class="set">
+      <a href="mailto:tbbgreen@gmail.com">Email</a>
+      <a href="https://github.com/tgreen-fe">GitHub</a>
+      <a href="https://linkedin.com/in/tbbgreen">LinkedIn</a>
+      <a href="assets/Thomas_Green_CV.pdf">CV</a>
+    </span>
+  </div>
+</footer>
+</body>
+</html>

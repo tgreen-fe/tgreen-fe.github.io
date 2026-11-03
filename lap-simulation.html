@@ -37,8 +37,8 @@
 <div class="wrap proj-head">
   <p class="eyebrow">Simulation &middot; Vehicle dynamics</p>
   <h1>Evaluating circuit layouts before any survey data exists</h1>
-  <p class="lede">Formula E races on temporary street circuits. Deciding
-    whether a proposed layout will produce a good race used to take weeks of
+  <p class="lede">Formula E races on temporary street circuits. Checking
+    whether a proposed layout will give a good race used to take weeks of
     manual analysis. It now takes about a day.</p>
 
   <dl class="meta">
@@ -53,45 +53,45 @@
   <div class="stats">
     <div><span class="v">1 day</span><span class="k">to judge a candidate layout, down from weeks of manual analysis</span></div>
     <div><span class="v">0</span><span class="k">survey data, telemetry or site visits needed</span></div>
-    <div><span class="v">3</span><span class="k">demands balanced in the read-out: safety, energy, racing</span></div>
+    <div><span class="v">3</span><span class="k">factors weighed in the read-out (safety, energy and racing)</span></div>
   </div>
 </div>
 
 <div class="wrap prose">
   <h2>The problem</h2>
-  <p>A new Formula E circuit starts as lines on a city map. Long before any
-    survey happens, somebody has to answer whether racing on it would be safe,
-    whether the cars could complete it on the available energy, and whether it
-    would actually be entertaining. Those three pull against each other. A layout that is comfortably safe is
-      often processional, and one that rewards overtaking is usually
-      tight in the places that make the safety case harder.</p>
-  <p>The analysis behind that judgement was manual and slow, so fewer candidate
-    layouts got examined properly and options were discarded on intuition instead of being tested.</p>
+  <p>A new Formula E circuit starts as lines on a city map. Before any survey,
+    someone has to decide if it is safe, if the cars can finish on the
+    available energy, and if the racing will be good. These conflict. A safe
+    layout is often processional, and one that rewards overtaking is usually
+    tight where safety is harder.</p>
+  <p>The analysis was manual and slow. Few layouts were examined properly,
+    and some were dropped on intuition without being tested.</p>
 </div>
 
 <div class="wrap">
   <div class="media-row">
     <figure class="fig-svg" style="margin:0">
       <img src="assets/fig/lapsim-pipeline.svg"
-           alt="Vertical pipeline: proposed circuit geometry, then track model, then vehicle and energy model, then lap simulation, then design read-out covering lap time, energy and overtaking, iterated per candidate layout." width="360" height="536">
+           alt="Pipeline diagram. Circuit geometry goes through a track model, a vehicle and energy model and a lap simulation, giving lap time, energy and overtaking. This repeats for each candidate layout." width="360" height="536">
     </figure>
     <div>
       <h2 style="margin-top:0">What it does</h2>
-      <p>The tool takes a proposed layout as geometry and works forward from
-        there. It builds a track model, runs it against a vehicle and energy
-        model of the car, and simulates the lap to produce the numbers the design team needs: how long a lap takes, how the
-        energy budget plays out across a race distance, and where on the
-        circuit a following car would have a realistic chance of getting
-        past.</p>
-      <p>It needs only the layout geometry, so it can be used early, while the design is still cheap to change.</p>
+      <p>The tool takes a proposed layout as geometry. It builds a track model,
+        runs it against a vehicle and energy model of the car, and simulates the
+        lap. The output gives the lap time, energy use over a race distance, and
+        where a following car has a realistic chance to overtake.</p>
+      <p>It only needs the layout geometry, so the team can run it while the
+        design is still cheap to change.</p>
     </div>
   </div>
 </div>
 
 <div class="wrap prose">
-  <h2>Why that matters</h2>
-  <p>Circuit reviews that took weeks of manual work now turn around in a day,
-    including for entirely new venues where there is no prior data. The bigger effect is that when evaluating a layout is cheap, the team compares several instead of assessing only the one proposed, including options that wouldn't previously have justified the effort.</p>
+  <h2>Outcome</h2>
+  <p>Circuit reviews that took weeks of manual work now take a day, including
+    for new venues with no prior data. Because each evaluation is quick, the
+    team now compares several layouts, including ones that were not worth the
+    effort before.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>
@@ -101,7 +101,7 @@
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>Thomas Green &middot; London, UK</span>
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
     <span class="set">
       <a href="mailto:tbbgreen@gmail.com">Email</a>
       <a href="https://github.com/tgreen-fe">GitHub</a>

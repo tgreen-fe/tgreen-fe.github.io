@@ -37,9 +37,9 @@
 <div class="wrap proj-head">
   <p class="eyebrow">Machine vision</p>
   <h1>Detecting and counting apples in orchard imagery</h1>
-  <p class="lede">Yield estimation from orchard imagery, treated as three
-    connected problems: find the apples, count them, and separate the ones
-    that are touching.</p>
+  <p class="lede">Yield estimation from orchard imagery, split into three
+    problems. Find the apples, count them, and separate the ones that are
+    touching.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>Machine Vision, MSc Robotics, Bristol</dd></div>
@@ -53,60 +53,53 @@
 <div class="wrap">
   <figure class="bleed plain">
     <img src="assets/img/apple-results.webp"
-         alt="Top left: orchard image with green detection boxes around individual apples. Top middle: the same image with coloured instance segmentation masks. Top right: cropped examples of individual detected apples, including blurred, occluded and yellow fruit. Bottom: four source orchard images showing red and yellow varieties in varying light." width="1000" height="1097">
-    <figcaption>Detections, instance masks and individual crops from the same
-      orchard scene. The bottom row shows the variety in the source imagery:
-      two cultivars, different light, and a lot of fruit on the ground that
-      should not be counted as fruit on the tree.</figcaption>
+         alt="Top row: an orchard image with green detection boxes around apples, the same image with coloured instance masks, and crops of detected apples including blurred, occluded and yellow fruit. Bottom row: four source images of red and yellow varieties in varying light." width="1000" height="1097">
+    <figcaption>Detections, instance masks and crops from one orchard scene.
+      The bottom row shows source images with two cultivars, different light
+      and fallen fruit on the ground, which should not be counted.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
-  <h2>What makes an orchard scene hard</h2>
-  <p>A single apple is an easy detection target, but an orchard scene is much
-    harder. The difficulties are structural: fruit hangs in clusters where the boundary between two apples
-    is a soft edge rather than a hard one, foliage occludes most of the crop
-    most of the time, and the same variety photographs completely differently
-    depending on where the sun is. Windfall on the ground looks identical to
-    fruit on the tree and must not be counted.</p>
-  <p>Counting compounds this. Individually small detection errors accumulate into
-    the yield figure, so a model that looks respectable on a per-image metric
-    can still be well out on the total.</p>
+  <h2>The orchard scene</h2>
+  <p>Fruit hangs in clusters, and the boundary between two touching apples is a
+    soft edge. Foliage hides most of the crop most of the time. The same variety
+    looks very different depending on where the sun is. Windfall on the ground
+    looks the same as fruit on the tree and must not be counted.</p>
+  <p>Small detection errors add up in the yield figure. A model with a good
+    per-image metric can still be well out on the total.</p>
 </div>
 
 <div class="wrap">
   <figure class="bleed plain">
     <img src="assets/img/apple-nb1.webp"
          alt="Four panels: the original orchard image, its blurred LAB A channel where red fruit shows as bright blobs, its blurred B channel, and a colour-enhanced version of the original." width="989" height="394">
-    <figcaption>Working in LAB rather than RGB. The A channel separates red
-      fruit from foliage far more cleanly than any RGB combination does, which
-      made it a useful preprocessing step and a decent classical baseline to
-      measure the learned models against.</figcaption>
+    <figcaption>The image in LAB colour space. The A channel separates red
+      fruit from foliage more cleanly than any RGB combination. We
+      used it for preprocessing and as a classical baseline for the learned
+      models.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
   <h2>What we built</h2>
-  <p>This was a five-person team; my side was the model training and
-    evaluation.</p>
+  <p>This was a five-person team. I did the model training and evaluation.</p>
   <ul class="tick">
-    <li>Training and prediction pipelines for both Faster R-CNN and YOLO
-      against the same dataset, so the comparison is about the architecture
-      rather than the data handling.</li>
-    <li>A colour-space preprocessing stage in LAB, used both as an input
-      enhancement and as a non-learned baseline worth beating.</li>
-    <li>Separate evaluation for detection, counting and segmentation, because
-      they fail in different ways and a single mAP number hides that.</li>
-    <li>A conversion step from polygon annotations to instance masks, which was
-      most of the unglamorous work.</li>
+    <li>Training and prediction pipelines for Faster R-CNN and YOLO on the same
+      dataset, with the same data handling for both.</li>
+    <li>A LAB colour-space preprocessing stage, used as an input enhancement and
+      as a non-learned baseline.</li>
+    <li>Separate evaluation for detection, counting and segmentation, since they
+      fail in different ways and a single mAP number hides that.</li>
+    <li>A conversion step from polygon annotations to instance masks. This was
+      most of the work.</li>
   </ul>
 
   <h2>What it showed</h2>
-  <p>The two architectures trade off in the way the literature suggests, with
-    the single-stage detector faster and the two-stage one better on the small
-    and partially occluded fruit that make up the difficult tail of the
-    dataset. For yield estimation that tail is where most of the counting error comes from,
-      so accuracy is worth more here than throughput.</p>
+  <p>The results matched the literature. The single-stage detector was faster.
+    The two-stage detector was better on small and partially occluded fruit.
+    For yield estimation those fruit cause most of the counting error, so we
+    valued accuracy over throughput.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>
@@ -116,7 +109,7 @@
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>Thomas Green &middot; London, UK</span>
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
     <span class="set">
       <a href="mailto:tbbgreen@gmail.com">Email</a>
       <a href="https://github.com/tgreen-fe">GitHub</a>

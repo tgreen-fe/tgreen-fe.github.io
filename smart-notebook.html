@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f1f1ee">
-<title>An e-paper display that summarises a paper notebook - Thomas Green</title>
-<meta name="description" content="An e-paper display built into the cover of a hardback notebook, driven by a Raspberry Pi Pico, showing summaries of the handwritten pages inside it.">
-<meta property="og:title" content="An e-paper display that summarises a paper notebook - Thomas Green">
-<meta property="og:description" content="An e-paper display built into the cover of a hardback notebook, driven by a Raspberry Pi Pico, showing summaries of the handwritten pages inside it.">
+<title>A paper notebook that reads what I write - Thomas Green</title>
+<meta name="description" content="A paper notebook that captures handwriting with no change to the pen or paper: sound-based recognition, a piezo array with a custom amplifier PCB, and an e-paper cover.">
+<meta property="og:title" content="A paper notebook that reads what I write - Thomas Green">
+<meta property="og:description" content="A paper notebook that captures handwriting with no change to the pen or paper: sound-based recognition, a piezo array with a custom amplifier PCB, and an e-paper cover.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://tgreen-fe.github.io/smart-notebook.html">
 <meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
@@ -35,129 +35,235 @@
 <article>
 
 <div class="wrap proj-head">
-  <p class="eyebrow">Embedded systems &middot; Self-directed</p>
-  <h1>An e-paper display that summarises a paper notebook</h1>
-  <p class="lede">I write on paper and rarely look back at it, so I cut a
-    recess into the back cover of a notebook, fitted an e-paper display, and
-    set it up to show summaries of the recent pages.</p>
+  <p class="eyebrow">Embedded systems &middot; In progress</p>
+  <h1>A paper notebook that reads what I write</h1>
+  <p class="lede">I think better on paper, but nothing on a paper page is searchable. I'm building a notebook that turns handwriting into text without changing the pen, the paper or how I write, and shows a summary on an e-paper display in the cover.</p>
 
   <dl class="meta">
-    <div><dt>Context</dt><dd>Personal project, built for my own use</dd></div>
+    <div><dt>Context</dt><dd>Personal project</dd></div>
     <div><dt>Role</dt><dd>Sole author, whole system</dd></div>
-    <div><dt>Hardware</dt><dd>Raspberry Pi Pico, Waveshare e-paper</dd></div>
+    <div><dt>Hardware</dt><dd>Teensy 4.1, custom amplifier PCB, piezo discs, Pico W, Waveshare e-paper</dd></div>
+    <div><dt>Status</dt><dd>In progress, November 2026</dd></div>
     <div><dt>Code</dt><dd><a href="https://github.com/tgreen-fe/smart-notebook">smart-notebook</a></dd></div>
   </dl>
 </div>
 
 <div class="wrap">
   <figure class="bleed plain">
+    <img src="assets/img/notebook-pcb-populated.webp"
+         alt="A green 16-channel amplifier circuit board on a wooden desk, fully populated with rows of through-hole resistors and four 14-pin amplifier chips, with a Teensy 4.1 microcontroller mounted along its left edge."
+         width="1200" height="900">
+    <figcaption>The 16-channel piezo amplifier board, hand-soldered, with the
+      Teensy 4.1 that samples it.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Aim</h2>
+  <p>The first version put an e-paper display in the cover and showed
+    summaries of recent pages. It worked, but every page had to be
+    photographed first. That extra step is the kind of distraction I want the
+    notebook to remove. The aim now is technology you don't notice: any pen or
+    pencil, ordinary paper, and nothing to do except write.</p>
+  <p>Planned features:</p>
+  <ul class="tick">
+    <li>Swappable paper pads, each labelled when inserted.</li>
+    <li>Written commands: <code>##</code> followed by a sentence creates a
+      phone reminder, and <code>@</code> creates a calendar entry.</li>
+    <li>The e-paper inside cover as a live contents page.</li>
+  </ul>
+  <p>I'm working on two ways of capturing the writing: recognising it from the
+    sound of the pen through a phone microphone, and locating the pen with an
+    array of piezo sensors under the page.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed fig-svg">
+    <img src="assets/fig/notebook-system.svg"
+         alt="System diagram. Pen on paper feeds two capture tracks. Track 1: a phone microphone and IMU feed a CNN and BiGRU model trained with CTC and a lexicon decoder. Track 2, in progress: 16 piezo discs under the page feed an amplifier PCB and a Teensy 4.1 sampling at 100 kHz per channel, using time difference of arrival to find pen position. Both feed text and position, which is summarised by a language model, rendered to a one-bit image and shown on the e-paper cover driven by a Pico W."
+         width="900" height="452">
+    <figcaption>The current design. Track 1 is working on the desk. Track 2
+      is in bring-up.</figcaption>
+  </figure>
+</div>
+
+<div class="wrap prose">
+  <h2>Track 1: recognising handwriting from sound</h2>
+  <p>I wrote an iOS app in Swift that shows a sentence prompt and records
+    48 kHz audio and 100 Hz accelerometer and gyro data while I write it. The
+    dataset is 178 clips over three sessions: one writer, one pen, A4 paper on
+    a desk, with the phone lying next to it.</p>
+  <p>The model takes log-mel spectrograms with the noise floor subtracted and
+    runs them through a 3-layer CNN and a 2-layer BiGRU, trained with CTC loss
+    (about 400k parameters) and SpecAugment. I trained it on a MacBook.</p>
+  <p>On held-out sentences, greedy decoding gave a 30% character error rate
+    and 77% word error rate. A beam decoder constrained to a lexicon of the 60k
+    most frequent English words, weighted by frequency, brought this to 24% CER
+    and 51% WER. "borrow a drill from jake" came out as "borrog a dril frum
+    cake". Published phone-microphone work reports 50 to 88% word
+    accuracy.</p>
+  <ul class="tick">
+    <li>Individual letters show as broadband bursts 10 to 20 dB above the
+      background.</li>
+    <li>Errors follow stroke shape: b/p, m/n, d/t and o/e.</li>
+    <li>Training error was about 3%, so the model needs more data.</li>
+    <li>Moving the phone between sessions reduces accuracy, so its position
+      has to be fixed.</li>
+    <li>Almost every output ended in a spurious "t". It was the sound of my
+      hand lifting off the page before I tapped stop. Cropping clip endings
+      in augmentation made things worse (CER 0.67) because it cut real
+      letters. Tapping stop with the other hand fixed it.</li>
+  </ul>
+
+  <h2>Track 2: locating the pen with piezo sensors</h2>
+  <p>Vibration from the pen reaches each piezo disc at a slightly different
+    time. The differences in arrival time give the pen's position. I've found
+    few other projects using this for handwriting.</p>
+  <p>The first prototype had four 20 mm piezo discs on a 4 mm glass plate,
+    each with a TL074 preamp at a gain of 101, sampled by a Teensy 4.1 at
+    120 kHz per channel. The measured wave speed in the glass was about
+    438 m/s. The median tap localisation error was about 20 mm: 8 to 12 mm in
+    the centre and worse at the corners. That is enough for word or line
+    position and pen-down detection, but not for letter shapes, mainly because
+    of dispersion and reverberation in the plate.</p>
+  <p>The next version uses a 4&times;4 grid of discs on an A5 plate, sampled
+    at 100 kHz per channel using the Teensy's hardware ADC chaining
+    (ADC_ETC), so the CPU only copies results out and the sample clock has no
+    jitter.</p>
+</div>
+
+<div class="wrap">
+  <div class="media-row">
+    <figure>
+      <img src="assets/img/notebook-pcb-bare.webp" loading="lazy"
+           alt="The amplifier board early in assembly: the Teensy 4.1 and one amplifier chip fitted with a single bank of resistors, and the rest of the board's pads and silkscreen outlines still empty."
+           width="1200" height="900">
+      <figcaption>The board early in assembly, with one channel bank
+        fitted.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/notebook-piezo-sheet.webp" loading="lazy"
+           alt="A clear sheet on a wooden table with piezo discs laid out in rows under a ruled reference grid, red and black wires running off its edges."
+           width="900" height="1200">
+      <figcaption>Piezo discs laid out on a test sheet with a reference
+        grid.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="wrap prose">
+  <h2>The amplifier board</h2>
+  <p>I generated the PCBs in Python, writing the Gerber files directly, with
+    my own autorouter and design-rule checks. I made three variants and had
+    the compact through-hole one (98 &times; 69 mm) built by JLCPCB.</p>
+  <p>I also wrote a separate checker, <code>verify_gerber.py</code>, that
+    rebuilds the copper connections from the Gerber files and compares them
+    with the circuit netlist. It found a wrong Teensy pin order in all three
+    designs before I ordered the corrected boards.</p>
+  <p>On the host side there is a multiprocess serial capture, which took
+    dropped frames from about 4% to zero, a live 16-channel viewer, and
+    offline and live localisation scripts.</p>
+
+  <h2>Bring-up</h2>
+  <ul class="tick">
+    <li>The board streams 16 channels at 100 kHz with no dropped frames.
+      Noise on empty channels is 1 to 2 counts rms in the 2 to 15 kHz
+      band.</li>
+    <li>Signals appeared copied onto later channels in the conversion order,
+      which looked like an ADC firmware fault. The cause was unpopulated
+      channels with floating ADC pins reading back charge from the previous
+      conversion. Populated channels don't do this, so no firmware change was
+      needed.</li>
+    <li>Mains noise came from the laptop charger and disappears on
+      battery.</li>
+    <li>Firm taps clip because most of their energy is plate ringing at 300 to
+      500 Hz. A high-pass in the front end (a capacitor in series with Rg and
+      a smaller Rb) should stop it saturating the amplifiers.</li>
+  </ul>
+
+  <h2>Power</h2>
+  <p>The target is two weeks between charges at about an hour of writing a
+    day, from a 1000 to 1500 mAh LiPo. That means under 40 mA while writing,
+    under 50 &micro;A open and idle, and a few &micro;A closed. A passive
+    piezo tap detector wakes the system, accepting that the start of the first
+    stroke is lost. The e-paper proof of concept runs on a Pico W, and the
+    final version will use a lower-power controller.</p>
+
+  <h2>Next</h2>
+  <ul class="tick">
+    <li>Fit the front-end high-pass, then record real pen strokes with my hand
+      resting on the plate.</li>
+    <li>Populate all 16 channels and try 3 mm acrylic in place of glass.</li>
+    <li>Grow the audio dataset to about 400 clips and repeat with the phone on
+      the notebook cover.</li>
+  </ul>
+  <p>Not yet done: pen-stroke localisation, recognition with other writers or
+    pens, and full stroke-trajectory reconstruction.</p>
+</div>
+
+<div class="wrap prose">
+  <h2>Version 1: the e-paper cover</h2>
+  <p>The display side is built. I cut a recess into the back board of a
+    hardback notebook and fitted a cell, charger, Pico, driver board and a
+    7.5-inch three-colour Waveshare panel. The cover still closes.</p>
+</div>
+
+<div class="wrap">
+  <figure class="bleed plain">
     <div class="callout-wrap">
-      <img src="assets/img/notebook-internals.webp"
-           alt="The inside back cover of a hardback notebook, hollowed out and lined with black moulded trays. Set into it are a lithium-polymer pouch cell, a small blue charging module, a Raspberry Pi Pico and a Pico e-paper driver board, wired together with fine enamelled copper wire, with a ribbon cable running out to the display." width="1230" height="875">
+      <img src="assets/img/notebook-internals.webp" loading="lazy"
+           alt="The inside back cover of a hardback notebook, hollowed out and lined with black moulded trays. Set into it are a lithium-polymer pouch cell, a small blue charging module, a Raspberry Pi Pico and a Pico e-paper driver board, wired with fine enamelled copper wire, with a ribbon cable running out to the display." width="1230" height="875">
       <span class="callout l" style="left:47%; top:14%">Cell</span>
       <span class="callout l" style="left:80%; top:25%">Pico</span>
       <span class="callout l" style="left:23%; top:42%">USB-C charger</span>
       <span class="callout l" style="left:58%; top:60%">Driver board</span>
       <span class="callout l" style="left:56%; top:86%">Ribbon to panel</span>
     </div>
-    <figcaption>Everything lives in the back board of the notebook: cell,
-      charger, Pico, driver board, and the ribbon out to the panel. The cover
-      still closes.</figcaption>
+    <figcaption>The electronics in the back board of the
+      notebook.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
-  <h2>Why I built it</h2>
-  <p>This one is a personal build. I think better on paper and keep a notebook
-    properly, but a fortnight later the contents may as well not exist,
-    because nothing on a paper page is searchable. Digital notes fix that, but they lose the reason I write on paper in the first place.</p>
-  <p>The idea was to keep writing on paper and have the notebook do the recall
-    itself: an e-paper display in the cover, showing what the recent pages
-    were about and what the week looks like, updating without the notebook
-    ever being opened.</p>
+  <p>In version 1, pages were photographed and turned into text in a watched
+    folder. Four separate language-model calls corrected the spelling,
+    wrote a short title, summarised the page in under forty words and
+    extracted a date. Splitting them made each one more reliable than a single
+    combined call. The results went into a JSON store, which a local web page
+    rendered alongside a weather forecast. A headless browser screenshotted
+    that page at the panel's resolution and reduced it to a one-bit image per
+    colour, and the Pico pulled the image and drove the panel. Laying out text
+    and icons in HTML was much simpler than doing it on the
+    microcontroller.</p>
+  <p>A full-panel image is larger than the Pico can comfortably hold, so I
+    wrote a set of compression experiments in C to find a format small enough
+    to move and cheap enough to decode.</p>
 </div>
 
 <div class="wrap">
   <div class="media-row">
     <figure>
-      <img src="assets/img/notebook-build.webp"
-           alt="An early build stage outdoors on a weathered wooden bench: the notebook's board covers split open and hollowed, with filler smoothed into the recess, and a Raspberry Pi Pico and two flat battery cells laid in place to check they fit."
-           loading="lazy" width="1050" height="1060">
-      <figcaption>Checking the recess before committing. Most of the difficulty
-        in this build was mechanical rather than electrical.</figcaption>
+      <img src="assets/img/notebook-build.webp" loading="lazy"
+           alt="An early build stage on a weathered wooden bench: the notebook's board covers split open and hollowed, with filler smoothed into the recess, and a Raspberry Pi Pico and two flat battery cells laid in place to check they fit."
+           width="1050" height="1060">
+      <figcaption>Test-fitting the parts in the recess.</figcaption>
     </figure>
     <figure>
-      <img src="assets/img/notebook-panel.webp"
-           alt="Close view of the blue Pico e-paper driver board with its GPIO labels visible, a flat ribbon cable running from its connector into the edge of the e-paper panel behind it."
-           loading="lazy" width="505" height="449">
-      <figcaption>The driver board, and the ribbon into the panel. Three-colour
-        e-paper, so the palette is black, white and red and nothing in
-        between.</figcaption>
+      <img src="assets/img/notebook-display.webp" loading="lazy"
+           alt="The e-paper display in the notebook cover, showing a seven-day weather forecast in red across the top with icons and temperatures, and below it a generated title and summary paragraph about recent news, with a date and page number in the margin."
+           width="922" height="715">
+      <figcaption>The panel output: forecast at the top, generated title and
+        summary below.</figcaption>
     </figure>
   </div>
 </div>
 
 <div class="wrap prose">
-  <h2>How it works</h2>
-  <p>The chain is longer than it looks, because none of the parts talk to each
-    other natively.</p>
-
-  <figure class="bleed fig-svg">
-    <img src="assets/fig/notebook-system.svg"
-         alt="System diagram. An open notebook with the 7.5-inch e-paper panel set into the inside cover, facing a handwritten page, and the driver board, Pico, USB-C controller and cell in the back board. Pages pass through a capture stage producing plain text, a compile stage of four language-model calls, a render stage producing a one-bit image, and a display stage where the Pico drives the panel, with a return arrow carrying the finished summary back to the e-paper." width="900" height="400">
-    <figcaption>The chain from a handwritten page to the panel in the cover.
-      Four separate language-model calls do the reading, the browser does the
-      typesetting, and the Pico only ever sees a finished one-bit
-      image.</figcaption>
-  </figure>
-  <ul class="tick">
-    <li>Pages get captured and turned into plain text, dropped into a watched
-      folder.</li>
-    <li>A file watcher notices the new file and triggers the compiler.</li>
-    <li>Four separate language-model calls run over the text: correct the
-      spelling, produce a short title, summarise in under forty words, and pull
-      out a date. Splitting them up rather than asking for all four at once made
-      each one far more reliable.</li>
-    <li>The results append to a JSON store, which a small local web page
-      renders alongside a weather forecast.</li>
-    <li>That page gets screenshotted headlessly at exactly the panel's
-      resolution, then reduced to a one-bit-per-channel image.</li>
-    <li>The Pico pulls the image and drives the panel. E-paper holds its state
-      with no power, so the display only costs anything at the moment it
-      changes.</li>
-  </ul>
-  <p>Rendering to a web page and screenshotting it is the decision I would keep.
-    Laying out mixed text and icons directly on a microcontroller is painful,
-    and HTML and CSS already do it well. Letting the browser do the
-    typesetting and treating the Pico as a dumb display removed most of that
-    work.</p>
-
-  <h2>Getting the image onto the microcontroller</h2>
-  <p>The awkward constraint is memory. A full-panel image is larger than the
-    Pico comfortably wants to hold, so a chunk of this project is a set of
-    compression experiments written in C, trying to find a format that is small enough to move and cheap enough to decode on a device with almost no memory to spare. That directory taught me more than anything else in the repository.</p>
-</div>
-
-<div class="wrap">
-  <figure class="bleed plain">
-    <img src="assets/img/notebook-display.webp"
-         alt="The e-paper display in the notebook cover, showing a seven-day weather forecast in red across the top with icons and temperatures, and below it a generated title and summary paragraph about recent news, with a date and page number in the margin."
-         loading="lazy" width="922" height="715">
-    <figcaption>The output, straight off the panel. Forecast across the top,
-      generated title and summary underneath.</figcaption>
-  </figure>
-</div>
-
-<div class="wrap prose">
-  <h2>Where it fails</h2>
-  <p>The photograph above shows the failure modes rather than a staged best case.
-    The date reads 01/01/1999,
-    which is the sentinel the code returns when the extraction step can't find a date and gives up. The page number next to it is wrong. And the title is
-    not the short one the prompt asked for, it is most of a paragraph.</p>
-  <p>All three are the same class of problem: a language model asked for
-    structured output in a fixed format, complying most of the time but not always, with a regex behind it doing the actual parsing. The fallbacks work, so the display renders something sensible instead of
-      crashing, but what is on the panel in that photograph is the fallbacks
-      firing. If I rebuilt it now I'd use constrained decoding for the fields that have to be machine-readable and stop trying to parse prose.</p>
+  <p>The photo shows the fallbacks working. The date reads 01/01/1999, which
+    the code returns when it can't find a date. The page number is wrong, and
+    the title is most of a paragraph. In each case the model ignored the fixed
+    output format and a regex behind it had to parse prose. Next time I'd use
+    constrained decoding for the machine-readable fields.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>
@@ -167,7 +273,7 @@
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>Thomas Green &middot; London, UK</span>
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
     <span class="set">
       <a href="mailto:tbbgreen@gmail.com">Email</a>
       <a href="https://github.com/tgreen-fe">GitHub</a>

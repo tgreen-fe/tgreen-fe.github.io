@@ -37,9 +37,9 @@
 <div class="wrap proj-head">
   <p class="eyebrow">Controls &middot; Embedded systems</p>
   <h1>A retrofit robot that operates a car's pedals</h1>
-  <p class="lede">Instead of replacing a vehicle's control systems, this robot
-    sits where the driver's feet go and works the pedals directly, so a
-    conventional car can be automated without touching its wiring.</p>
+  <p class="lede">This robot sits where the driver's feet go and works the
+    pedals directly. A conventional car can be automated without touching its
+    wiring.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>MEng group design project, Southampton</dd></div>
@@ -55,25 +55,23 @@
     <video src="assets/video/pedal-rig-run.mp4"
            poster="assets/video/pedal-rig-run.jpg"
            autoplay muted loop playsinline preload="metadata"
-           aria-label="The finished rig on the floor: the actuator arm working a pedal mounted on an upright plate, with the electronics in a clear acrylic enclosure on the baseplate behind it."></video>
+           aria-label="The finished rig on the floor. The actuator arm works a pedal mounted on an upright plate, with the electronics in a clear acrylic enclosure on the baseplate behind it."></video>
     <figcaption>The finished rig cycling a pedal on its test plate. The
-      electronics sit in the acrylic enclosure at the back of the
-      baseplate.</figcaption>
+      electronics are in the acrylic enclosure at the back.</figcaption>
   </figure>
 
   <figure class="bleed">
     <video src="assets/video/pedal-assembly.mp4"
            poster="assets/video/pedal-assembly.jpg"
            autoplay muted loop playsinline preload="metadata"
-           aria-label="A CAD assembly animation building the pedal robot up part by part: a baseplate, then the motor and drive, then the electronics and battery, then a cage frame, ending with the output arm reaching across to a mounted pedal."></video>
-    <figcaption>The assembly, built up part by part. Everything mounts to a
-      single baseplate that drops into the footwell, with the output arm
-      reaching across to the pedal.</figcaption>
+           aria-label="A CAD animation building the pedal robot part by part. A baseplate, then the motor and drive, the electronics and battery, a cage frame, and finally the output arm reaching across to a mounted pedal."></video>
+    <figcaption>The CAD assembly, built up part by part. Everything mounts to
+      a single baseplate that drops into the footwell.</figcaption>
   </figure>
 
   <div class="media-row">
     <figure>
-      <img src="assets/img/pedal-render.webp" alt="Three-quarter CAD render of the pedal actuator: a flat black baseplate carrying a compact motor and linkage at one end, with a long arm reaching to a pedal bracket at the other." loading="lazy" width="1200" height="667">
+      <img src="assets/img/pedal-render.webp" alt="Three-quarter CAD render of the pedal actuator. A flat black baseplate carries a compact motor and linkage at one end, with a long arm reaching to a pedal bracket at the other." loading="lazy" width="1200" height="667">
       <figcaption>The linkage that reaches the pedal.</figcaption>
     </figure>
     <figure>
@@ -84,7 +82,7 @@
 
   <div class="media-row">
     <figure>
-      <img src="assets/img/pedal-car-install.webp" alt="The robot installed in the footwell of the test car, a Prius plug-in hybrid: the acrylic enclosure fixed to its baseplate with the output arm reaching down towards the pedal." loading="lazy" width="1600" height="900">
+      <img src="assets/img/pedal-car-install.webp" alt="The robot installed in the footwell of a Prius plug-in hybrid, with the acrylic enclosure on its baseplate and the output arm reaching down to the pedal." loading="lazy" width="1600" height="900">
       <figcaption>Installed in the test car, a Prius plug-in hybrid. The
         baseplate sits where the driver's feet would go.</figcaption>
     </figure>
@@ -107,33 +105,35 @@
 
 <div class="wrap prose">
   <h2>The problem</h2>
-  <p>Testing autonomous driving logic normally means a vehicle built for it.
-    That's expensive, and it rules out testing on the enormous number of conventional cars already on the road. A retrofit actuator that presses the
-    pedals is a way around this: it needs no access to the vehicle's own
-    control network, it can be moved between vehicles, and it can be removed
-    entirely afterwards.</p>
-  <p>A driver's foot is fast, precise enough, and it feels its own position. Replacing it mechanically means solving position sensing, force delivery and closed-loop control in
-    a package that fits in a footwell.</p>
+  <p>Testing autonomous driving logic normally needs a vehicle built for it.
+    That is expensive, and it rules out the conventional cars already on the
+    road. A retrofit actuator that presses the pedals needs no access to the
+    vehicle's control network. It can be moved between vehicles and removed
+    afterwards.</p>
+  <p>Replacing a driver's foot means handling position sensing, force delivery
+    and closed-loop control in a package that fits in a footwell.</p>
 </div>
 
 <div class="wrap">
   <figure class="bleed fig-svg">
     <img src="assets/fig/pedal-step-response.svg"
-         alt="Two-panel plot. The top panel shows a commanded PWM step from 0 to 255 at three and a half seconds. The lower panel shows the measured pedal position rising from 326 to 929 ADC counts with a 10 to 90 per cent rise time of 114 milliseconds and effectively no overshoot." width="532" height="324">
-    <figcaption>Full-scale step command against measured pedal position. The actuator covers the full pedal travel in 114 ms with no meaningful
-      overshoot.</figcaption>
+         alt="Two-panel plot. The top panel shows a commanded PWM step from 0 to 255 at 3.5 seconds. The lower panel shows the measured pedal position rising from 326 to 929 ADC counts, with a 10 to 90 per cent rise time of 114 milliseconds and effectively no overshoot." width="532" height="324">
+    <figcaption>Full-scale step command and measured pedal position. The
+      10 to 90 per cent rise time is 114 ms, with 0.2% overshoot.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
   <h2>Characterising the actuator</h2>
-  <p>The plant here is awkward: a motor driving a linkage against a pedal with its
-    own return spring and a non-linear feel. A controller can't be tuned for that without measuring it first, so the first job was system identification rather than control.</p>
-  <p>I ran a family of excitation signals through the actuator and logged the
-    position response: steps at several amplitudes, ramps, random square waves
-    and pseudo-random binary sequences at a range of dwell times. The PRBS runs are the useful ones for fitting a model, because they excite a
-      broad band of frequencies without driving the actuator beyond what the
-      mechanics can follow.</p>
+  <p>The plant is a motor driving a linkage against a pedal with its own return
+    spring and a non-linear feel. I needed to measure it before tuning a
+    controller, so I started with system identification.</p>
+  <p>I ran a set of excitation signals through the actuator and logged the
+    position response. These were steps at several amplitudes, ramps, random
+    square waves and pseudo-random binary sequences (PRBS) at a range of dwell
+    times. The PRBS runs were the most useful for fitting a model. They excite a
+    broad band of frequencies without driving the actuator faster than the
+    mechanics can follow.</p>
 </div>
 
 <div class="wrap">
@@ -141,30 +141,32 @@
     <video src="assets/video/pedal-sysid.mp4"
            poster="assets/video/pedal-sysid.jpg"
            autoplay muted loop playsinline preload="none"
-           aria-label="The instrumented bench during an excitation run: the actuator and battery on the baseplate drive a long linkage rod while a laptop logs the response."></video>
-    <figcaption>An excitation run on the bench, with the response logged from
-      the position sensors.</figcaption>
+           aria-label="The instrumented bench during an excitation run. The actuator and battery on the baseplate drive a long linkage rod while a laptop logs the response."></video>
+    <figcaption>An excitation run on the bench, logging the position
+      sensors.</figcaption>
   </figure>
 </div>
 
 <div class="wrap">
   <figure class="bleed fig-svg">
     <img src="assets/fig/pedal-prbs.svg"
-         alt="Two-panel plot. The top panel shows a pseudo-random binary drive signal alternating between plus and minus 125 PWM with varying dwell times over three seconds. The lower panel shows the corresponding pedal position response oscillating between roughly 380 and 470 ADC counts." width="532" height="309">
-    <figcaption>Pseudo-random binary excitation and the resulting motion. The dwell times
-      vary, so the run covers a band of frequencies instead of the single one a fixed-period square wave would excite.</figcaption>
+         alt="Two-panel plot. The top panel shows a pseudo-random binary drive signal switching between plus and minus 125 PWM with varying dwell times over three seconds. The lower panel shows the pedal position oscillating between roughly 380 and 470 ADC counts." width="532" height="309">
+    <figcaption>Pseudo-random binary excitation and the resulting motion. The
+      varying dwell times spread the excitation across a band of
+      frequencies.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
   <h2>Trusting the position signal</h2>
-  <p>The pedal sensor sits
-    on the pedal itself, so it measures the quantity that matters, but it's also exposed and its zero moves as the mechanism is disturbed. I cross-checked
-    it against a potentiometer on the actuator crank, which is mechanically
-    protected but only measures the pedal position indirectly through the
-    linkage.</p>
+  <p>The pedal sensor sits on the pedal, so it measures pedal position
+    directly. It is also exposed, and its zero moves when the mechanism is
+    disturbed. I cross-checked it against a potentiometer on the actuator
+    crank. That is mechanically protected but measures pedal position
+    indirectly through the linkage.</p>
   <p>Across a full stroke the two agree to within about two per cent of travel.
-    That makes the crank signal a usable redundant channel, and it means a disagreement between the two is a fault indicator instead of noise.</p>
+    The crank signal can therefore serve as a redundant channel, and a
+    disagreement between the two indicates a fault.</p>
 </div>
 
 <div class="wrap">
@@ -179,38 +181,35 @@
 
 <div class="wrap prose">
   <h2>What broke</h2>
-  <p>Two things broke, and both were mechanical, not electrical. The gearbox
-    developed enough backlash to be visible in the position trace as a dead
-    band around every direction reversal, which matters because pedal modulation is mostly small reversals rather than full-travel sweeps. And a
-    crank arm cracked at the pin slot, where the section is thinnest and the
-    load is highest.</p>
+  <p>Two mechanical parts failed. The gearbox developed backlash, visible in
+    the position trace as a dead band at every direction reversal. Pedal
+    modulation is mostly small reversals, so this matters. A crank arm also cracked at the pin slot, where the section is thinnest
+    and the load is highest.</p>
 </div>
 
 <div class="wrap">
   <div class="media-row">
     <figure>
-      <img src="assets/img/pedal-gearbox.webp" alt="An opened planetary gearbox photographed from above, showing a large internal ring gear, three planet gears and a central sun gear, with grease spread across the faces and visible wear on the tooth flanks." loading="lazy" width="900" height="898">
-      <figcaption>The gearbox opened up. Wear on the tooth flanks is where the
-        backlash came from.</figcaption>
+      <img src="assets/img/pedal-gearbox.webp" alt="An opened planetary gearbox from above, showing the ring gear, three planet gears and the sun gear, with grease across the faces and wear on the tooth flanks." loading="lazy" width="900" height="898">
+      <figcaption>The gearbox opened up. The backlash came from wear on the
+        tooth flanks.</figcaption>
     </figure>
     <figure>
-      <img src="assets/img/pedal-crank-failure.webp" alt="Close-up of a machined metal crank arm with a rounded end and a pin slot, with two red arrows pointing at cracks propagating from either side of the slot." loading="lazy" width="564" height="660">
-      <figcaption>Cracks propagating from both sides of the pin slot, arrowed.
-        A stress concentration we designed in and did not catch.</figcaption>
+      <img src="assets/img/pedal-crank-failure.webp" alt="Close-up of a machined metal crank arm with a pin slot, with two red arrows pointing at cracks running from either side of the slot." loading="lazy" width="564" height="660">
+      <figcaption>Cracks from both sides of the pin slot, arrowed. We designed
+        in this stress concentration and did not catch it.</figcaption>
     </figure>
   </div>
 </div>
 
 <div class="wrap prose">
-  <p>Neither is unusual for a first build, and both only show up once the rig has
-    done real cycles. The instrumentation caught the backlash before the crack
-    appeared: the dead band showed up in the sensor trace while the arm still
-    looked fine.</p>
+  <p>Both failures only appeared after the rig had done real cycles. The dead
+    band showed up in the sensor trace before the crack appeared, while the arm
+    still looked fine.</p>
 
-  <h2>What I took from it</h2>
-  <p>Measuring the plant before touching the controller is the habit that stuck. It
-    cost time at the start and saved more later, because tuning stopped being
-    guesswork. It's also why I regret not instrumenting the vine robot earlier.</p>
+  <h2>Measuring first</h2>
+  <p>System identification took time at the start. It saved more later,
+    because I tuned the controller against measured data.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>
@@ -220,7 +219,7 @@
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>Thomas Green &middot; London, UK</span>
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
     <span class="set">
       <a href="mailto:tbbgreen@gmail.com">Email</a>
       <a href="https://github.com/tgreen-fe">GitHub</a>

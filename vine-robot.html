@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f1f1ee">
 <title>Soft vine robot for fibre installation - Thomas Green</title>
-<meta name="description" content="A soft growing robot that installs fibre-optic cable through congested buried ducting, taken from concept through field trials to production and testing.">
+<meta name="description" content="A soft growing robot that installs fibre-optic cable through congested buried ducting, taken from concept through field trials. In production and testing as of 2024.">
 <meta property="og:title" content="Soft vine robot for fibre installation - Thomas Green">
-<meta property="og:description" content="A soft growing robot that installs fibre-optic cable through congested buried ducting, taken from concept through field trials to production and testing.">
+<meta property="og:description" content="A soft growing robot that installs fibre-optic cable through congested buried ducting, taken from concept through field trials. In production and testing as of 2024.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://tgreen-fe.github.io/vine-robot.html">
 <meta property="og:image" content="https://tgreen-fe.github.io/assets/og-card.png">
@@ -39,13 +39,13 @@
   <h1>A soft robot that installs fibre through buried duct</h1>
   <p class="lede">Laying fibre-optic cable into existing underground duct is
     slow, and the ducts are rarely clear. We built a soft robot that everts
-    its way along them instead.</p>
+    along them.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>Liberty Global, Technology &amp; Innovation</dd></div>
     <div><dt>Role</dt><dd>Co-led ideation and prototyping</dd></div>
     <div><dt>Period</dt><dd>2022 to 2024, Zurich</dd></div>
-    <div><dt>Status</dt><dd>Patent-pending, in production and testing</dd></div>
+    <div><dt>Status</dt><dd>Patent pending; in production and testing (2024)</dd></div>
   </dl>
 </div>
 
@@ -55,9 +55,9 @@
     <video src="assets/video/vine-congested.mp4"
            poster="assets/video/vine-congested.jpg"
            autoplay muted loop playsinline preload="metadata"
-           aria-label="A transparent duct laid across a depot floor with black cable already running through it. The soft robot advances inside the duct alongside the existing cable, with a cable drum in the background."></video>
+           aria-label="A transparent duct on a depot floor with black cable already running through it. The soft robot advances inside the duct beside the existing cable, with a cable drum in the background."></video>
     <figcaption>Advancing along duct that already has cable in it, on a test
-      platform. In a live network most duct is already occupied, and that's the hardest condition for a pull, because every cable already in there is another surface to drag against.</figcaption>
+      platform. Most duct in a live network is already occupied, and each cable in it adds friction to a conventional pull.</figcaption>
   </figure>
 
   <div class="media-row">
@@ -80,8 +80,8 @@
              poster="assets/video/vine-debris.jpg"
              autoplay muted loop playsinline preload="metadata"
              aria-label="Ground-level view along a duct part-filled with compacted silt, with the robot carving a path through the deposit and pushing it aside against the duct wall."></video>
-      <figcaption>Carving through compacted silt, shifting it against the wall
-        instead of clearing it entirely.</figcaption>
+      <figcaption>Carving through compacted silt and pushing it against the
+        duct wall.</figcaption>
     </figure>
   </div>
 
@@ -99,16 +99,16 @@
              poster="assets/video/vine-vertical.jpg"
              autoplay muted loop playsinline preload="none"
              aria-label="The soft robot extending vertically upwards alongside a post, rising against gravity past trees."></video>
-      <figcaption>Extending vertically, where a pulled cable fights gravity
-        along its whole length.</figcaption>
+      <figcaption>Extending vertically. A pulled cable would have to carry its
+        own weight along its whole length.</figcaption>
     </figure>
   </div>
 
   <figure class="bleed fig-svg">
     <img src="assets/fig/vine-deployment.svg"
-         alt="Cross-section of a buried duct. A soft robot everts from an access chamber along the duct, past silt and partial blockages, towards a 90 degree bend into the next chamber. The fibre is drawn in behind the advancing tip." width="900" height="322">
+         alt="Cross-section of a buried duct. A soft robot everts from an access chamber, past silt and partial blockages, towards a 90 degree bend into the next chamber, drawing fibre in behind the tip." width="900" height="322">
     <figcaption>Deployment in buried duct. The robot enters at one access
-      chamber and everts along to the next, drawing fibre in behind the
+      chamber and everts to the next, drawing fibre in behind the
       tip.</figcaption>
   </figure>
 
@@ -121,45 +121,52 @@
 <div class="wrap prose">
 
   <h2>The problem</h2>
-  <p>A telecoms group with a fibre rollout to deliver has a lot of duct already
-    in the ground, and reusing it is far cheaper than digging. The catch is that nobody knows what's inside. Ducts laid decades ago silt up, partially
-    collapse, and take bends that a rigid rod won't follow. Conventional installation pushes or winches cable through. That needs pulling force at one end and tolerates very little friction, so it fails on the routes that are most expensive to dig up.</p>
-  <p>Every failed pull turns into an excavation, which is where the cost and the
-    delay are.</p>
+  <p>A telecoms group with a fibre rollout has a lot of duct already in the
+    ground. Reusing it is cheaper than digging, but nobody knows what is inside.
+    Ducts laid decades ago silt up, partly collapse and take bends a rigid rod
+    won't follow.</p>
+  <p>Conventional installation pushes or winches cable through. That needs
+    pulling force at one end and tolerates very little friction. It fails on the
+    routes that are most expensive to dig up, and each failed pull means an
+    excavation.</p>
 
   <h2>Why a growing robot</h2>
-  <p>A vine robot avoids the friction problem because nothing slides. The body everts
-    from the tip, so the material already inside the duct stays where it is
-    while the tip extends forwards. Nothing drags along the duct wall, so the force needed doesn't climb with distance the way a pull does. The tip can also work its way past a partial blockage instead of jamming against it.</p>
-  <p>The behaviour is well established in research, but very little of that work
-    had been aimed at buried telecoms duct at the lengths a real route needs.</p>
+  <p>A vine robot grows from the tip. The body everts, so the material already
+    inside the duct stays where it is while the tip extends. Nothing slides along
+    the duct wall, so the force needed doesn't rise with distance as it does for
+    a pull. The tip can also work its way past a partial blockage.</p>
+  <p>Vine robots are well established in research. Very little of that work had
+    targeted buried telecoms duct at the lengths a real route needs.</p>
 
   <h2>What I did</h2>
-  <p>I co-led the idea from the start and ran the prototyping. Over roughly nine months we built three prototypes, 3D printed and machined in-house, each one answering the failure we had hit with the last. The early builds answered whether the robot would evert at all.
-    The later ones dealt with what makes it deployable: getting round
-      bends, dealing with debris, and retracting cleanly when a run has to be
-      abandoned.</p>
-  <p>Once it held up on the bench we took it into the field, into live duct rather than a clean test rig. The best run covered more than 200 metres in
-    a single continuous traversal. We demonstrated the robot to the Group CTO, which secured the backing to take it further.</p>
+  <p>I co-led ideation and prototyping during my graduate placements at Liberty
+    Global. Over about nine months we built three prototypes, 3D printed and
+    machined in-house. Each one addressed a failure in the one before. The early builds tested whether the robot would evert at all. The later
+    ones dealt with getting round bends, handling debris and retracting cleanly
+    when a run has to be abandoned.</p>
+  <p>Once it worked on the bench we took it into live duct in the field. The
+    best run covered more than 200 metres in a single continuous traversal. We
+    demonstrated it to the Group CTO, which secured backing to take it
+    further.</p>
 </div>
 
 <div class="wrap">
   <div class="media-row">
     <figure>
       <img src="assets/img/vine-launcher.webp" loading="lazy"
-           alt="Cutaway render of the first launcher: a sealed cylindrical vessel sliced lengthwise, with a motor mounted on the end plate driving a shaft that carries a spool of tubing along the length of the vessel."
+           alt="Cutaway render of the first launcher. A sealed cylindrical vessel is sliced lengthwise, with a motor on the end plate driving a shaft that carries a spool of tubing."
            width="1600" height="900">
       <figcaption>The first launcher, cut away along its axis. A motor on the
-        end plate drives the spool of tubing through a shaft, inside a sealed
+        end plate drives the tubing spool through a shaft inside a sealed
         cylindrical vessel.</figcaption>
     </figure>
     <figure>
       <img src="assets/img/vine-launcher-v2-side.webp" loading="lazy"
-           alt="Cutaway render of the second launcher: a clear acrylic box with the near side panel removed, showing a tubing spool, a curved guide leading to an exit port on the right, and a stepper motor driving the spool."
+           alt="Cutaway render of the second launcher. A clear acrylic box with the near panel removed shows a tubing spool, a curved guide to an exit port on the right, and a stepper motor driving the spool."
            width="1600" height="900">
-      <figcaption>The second, with the near panel removed. Laser-cut acrylic
-        rather than a turned vessel, with the tubing guided to a single exit
-        port and a stepper driving the spool.</figcaption>
+      <figcaption>The second launcher with the near panel removed. It is
+        laser-cut acrylic, with the tubing guided to a single exit port and a
+        stepper driving the spool.</figcaption>
     </figure>
   </div>
 
@@ -173,43 +180,43 @@
     </figure>
     <figure>
       <img src="assets/img/vine-launcher-built.webp" loading="lazy"
-           alt="The second launcher in clear acrylic on a wooden deck: the stepper motor in its laser-cut mount, the blue spool discs behind it, and the clear exit tube at the front."
+           alt="The second launcher in clear acrylic on a wooden deck, with the stepper motor in its laser-cut mount, the blue spool discs behind it and the clear exit tube at the front."
            width="1152" height="1536">
-      <figcaption>The second launcher as built. The spool sits inside the
-        acrylic housing and the tubing leaves through a single exit
-        port.</figcaption>
+      <figcaption>The second launcher as built, with the spool inside the
+        acrylic housing.</figcaption>
     </figure>
   </div>
 
   <figure class="bleed plain">
     <img src="assets/img/vine-v2-clamps.webp" loading="lazy"
-         alt="The second prototype closed up: an acrylic lid held down by steel toggle clamps onto a vinyl-wrapped body carrying a Liberty Global logo and the label Vine Robot Prototype v2."
+         alt="The second prototype closed up. Steel toggle clamps hold an acrylic lid onto a vinyl-wrapped body carrying a Liberty Global logo and the label Vine Robot Prototype v2."
          width="1024" height="768">
-    <figcaption>The second prototype as built. The lid seals against a gasket
-      under toggle clamps, so it can be opened between runs and still hold pressure.</figcaption>
+    <figcaption>The second prototype closed up. Toggle clamps hold the lid
+      against a gasket, so it can be opened between runs and still hold
+      pressure.</figcaption>
   </figure>
 </div>
 
 <div class="wrap">
   <figure class="bleed plain">
     <img src="assets/img/vine-field.webp"
-         alt="An access chamber outside a building with its concrete lid levered aside, a spade resting nearby, and an engineer leaning into the open pit. On the slab beside them sits the deployment unit with hoses and wiring running down into the duct." width="1150" height="908">
-    <figcaption>A live access chamber during the field trials. The duct being tested is the duct
-      already in the ground, in whatever state decades of service have left it.</figcaption>
+         alt="An open access chamber outside a building, with its concrete lid levered aside and an engineer leaning into the pit. The deployment unit sits on the slab beside it, with hoses and wiring running down into the duct." width="1150" height="908">
+    <figcaption>A live access chamber during the field trials. The duct under
+      test is existing buried duct after decades of service.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
   <h2>Where it went</h2>
-  <p>Demand from the operating companies pushed it into productionisation, and
-    it's now in production and testing across them. A patent application covering the work
-    was filed by the company and is pending.</p>
+  <p>Demand from the operating companies moved it into productionisation. As of
+    2024 it was in production and testing across them. The company filed a
+    patent application covering the work, which is pending.</p>
 
   <h2>What I would do differently</h2>
-  <p>We characterised the robot mostly by whether a run succeeded. That was the
-    right call for proving the concept quickly, but it left us short of the
-    instrumented data that would have made the design iterations faster and the
-    productionisation handover cleaner. If I ran it again I'd build the measurement in from the first prototype, not the third.</p>
+  <p>We mostly judged the robot by whether a run succeeded. That proved the
+    concept quickly, but it left us without instrumented data. That data would
+    have sped up the design iterations and made the productionisation handover
+    cleaner. Next time I'd build measurement into the first prototype.</p>
 
   <a class="back" href="./#projects">&larr; All projects</a>
 </div>
@@ -219,7 +226,7 @@
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>Thomas Green &middot; London, UK</span>
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
     <span class="set">
       <a href="mailto:tbbgreen@gmail.com">Email</a>
       <a href="https://github.com/tgreen-fe">GitHub</a>

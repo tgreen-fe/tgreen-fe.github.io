@@ -37,11 +37,11 @@
 <div class="wrap proj-head">
   <p class="eyebrow">Embedded control &middot; Applied machine learning</p>
   <h1>Straight-line control on a differential-drive robot</h1>
-  <p class="lede">Give a small differential-drive robot the same command on both
-    motors and it curves. We compared four ways of correcting that, ending with a
-    network trained on the robot itself to copy the best of the others. Fusing two
-    heading sources solved it. The learned controller didn't improve on that,
-    because the heading estimate it was trained to copy was itself drifting.</p>
+  <p class="lede">A small differential-drive robot curves when both motors get the
+    same command. We compared four ways of correcting this. The last was a network
+    trained on the robot to copy the best of the other three. Fusing two heading
+    sources fixed the drift. The learned controller did no better, because the
+    heading estimate it learned to copy was drifting.</p>
 
   <dl class="meta">
     <div><dt>Context</dt><dd>MSc Robotics, Bristol</dd></div>
@@ -55,54 +55,51 @@
 <div class="wrap">
   <figure class="bleed fig-svg">
     <img src="assets/fig/threepi-trajectories.svg"
-         alt="Lateral deviation against distance travelled for sixteen runs. Five open-loop PWM runs fan out to about 0.6 metres of drift by 2 metres. Five PID runs reach 0.12 to 0.32 metres by 1.9 metres. Three fused-heading runs stay within about 0.05 metres out to 3.2 metres. Three runs of the learned controller spread between minus 0.12 and plus 0.26 metres." width="532" height="302">
-    <figcaption>Every unweighted run, by controller. The two uncorrected
-      controllers weren't driven as far, so their traces stop earlier.</figcaption>
+         alt="Lateral deviation against distance for sixteen runs. Five open-loop runs reach about 0.6 metres by 2 metres. Five PID runs reach 0.12 to 0.32 metres by 1.9 metres. Three fused-heading runs stay within about 0.05 metres to 3.2 metres. Three learned-controller runs spread from minus 0.12 to plus 0.26 metres." width="532" height="302">
+    <figcaption>All unweighted runs, by controller. The open-loop and PID runs
+      were shorter, so their traces stop earlier.</figcaption>
   </figure>
 
   <div class="stats">
-    <div><span class="v">0.60 m</span><span class="k">drift by the end of an open-loop run, on a robot with nothing wrong with it</span></div>
-    <div><span class="v">43</span><span class="k">trainable parameters in the network, trained on the robot itself</span></div>
-    <div><span class="v">0.25 m</span><span class="k">largest disagreement between the odometry and the tape measure</span></div>
+    <div><span class="v">0.60 m</span><span class="k">drift at the end of an open-loop run on a fault-free robot</span></div>
+    <div><span class="v">43</span><span class="k">trainable parameters in the network, trained on the robot</span></div>
+    <div><span class="v">0.25 m</span><span class="k">largest gap between odometry and the tape measure</span></div>
   </div>
 </div>
 
 <div class="wrap prose">
   <h2>The problem</h2>
-  <p>Give two nominally identical motors the same PWM and the robot curves. Ours
-    curved left, about 0.6 m off the line over a two-metre run, and there was
-    nothing wrong with it. That's what manufacturing tolerance, tyre wear and an
-    uneven floor add up to.</p>
-  <p>Correcting it isn't difficult in itself. The harder part is that a gain you
-    tune on the bench won't survive a payload sitting over one wheel, so we worked
-    up from the crudest controller to one that learns its own correction, measuring
-    the same thing at every step: how far off the line the robot ends up.</p>
+  <p>With the same PWM on two nominally identical motors, the robot curves. Ours
+    curved left, about 0.6 m off the line over a two-metre run, with no fault on
+    the robot. Manufacturing tolerance, tyre wear and an uneven floor are enough to
+    cause it.</p>
+  <p>A gain tuned on the bench does not hold with a payload over one wheel. We
+    worked up from the simplest controller to one that learns its own correction,
+    and measured the finishing distance off the line each time.</p>
 
   <h2>Four controllers</h2>
   <ul class="tick">
-    <li><b>Open-loop PWM.</b> The same duty cycle to both motors, as a baseline to
-      show the size of the problem.</li>
-    <li><b>PID per wheel.</b> Closed loop on wheel speed from the encoders, with
-      gains tuned by Ziegler-Nichols. It corrects the motors against each other,
-      which isn't the same as driving straight, and it only halved the drift.</li>
-    <li><b>Fused-heading correction.</b> Steering on heading instead of wheel speed,
-      where the heading comes from odometry corrected by the gyro. The gyro is noisy
-      but it picks up real rotation, and odometry is smooth but misses wheel slip
-      entirely. Neither is usable on its own.</li>
+    <li><b>Open-loop PWM.</b> The same duty cycle on both motors. This is the
+      baseline.</li>
+    <li><b>PID per wheel.</b> Closed loop on encoder wheel speed, with gains tuned
+      by Ziegler-Nichols. It matches the two motors to each other but does not
+      correct heading. It halved the drift.</li>
+    <li><b>Fused-heading correction.</b> Steers on heading from odometry corrected
+      by the gyro. The gyro is noisy but picks up real rotation. Odometry is smooth
+      but misses wheel slip. Neither is usable on its own.</li>
     <li><b>A network trained on the robot.</b> Five inputs, one hidden layer of six
-      units, 43 parameters, running in a 30 ms control step on the ATmega32U4
-      alongside everything else. It's first trained by copying the fused-heading
-      controller's steering commands, then tuned online against a shaped score. The
-      trained weights are written to EEPROM, so a policy survives a power cycle.</li>
+      units, 43 parameters. It runs in a 30 ms control step on the ATmega32U4
+      alongside the rest of the firmware. It is first trained to copy the
+      fused-heading controller's steering commands, then tuned online against a
+      shaped score. The weights are written to EEPROM, so a policy survives a power
+      cycle.</li>
   </ul>
 
   <h2>How it was measured</h2>
-  <p>The robot reports its own position from odometry, and odometry is the thing
-    under test, so the primary measurement had to come from outside it. Graph paper
-    ran the length of the track, a 3D-printed jig set the robot on the same starting
-    pose every time, and the finishing offset was read off the paper with a tape. We
-    logged odometry as well, and keeping both turned out to matter more than I
-    expected.</p>
+  <p>Odometry was under test, so the main measurement came from outside the robot.
+    Graph paper ran the length of the track. A 3D-printed jig set the same starting
+    pose for each run. We read the finishing offset off the paper with a tape and
+    also logged odometry.</p>
 </div>
 
 <div class="wrap">
@@ -110,34 +107,33 @@
     <figure>
       <img src="assets/img/threepi-bench.webp"
            alt="A Pololu 3Pi+ 32U4 robot on a lab bench in front of a laptop showing the Arduino IDE, with the sketch open and a board-not-available error in the console." width="768" height="1024" loading="lazy">
-      <figcaption>The platform. A Pololu 3Pi+ 32U4, with two encoders, a
-        five-element line sensor array, an LSM6 inertial unit and very little spare
+      <figcaption>A Pololu 3Pi+ 32U4, with two encoders, a five-element line
+        sensor array, an LSM6 inertial unit and very little spare
         compute.</figcaption>
     </figure>
     <figure>
       <img src="assets/img/threepi-jig.webp"
-           alt="The robot held in a 3D-printed alignment jig on graph paper, the jig bracketing the wheels so the robot starts square to the printed grid." width="414" height="478" loading="lazy">
-      <figcaption>The alignment jig. Without it the starting heading varies by more
-        than the effect we were trying to measure.</figcaption>
+           alt="The robot in a 3D-printed alignment jig on graph paper. The jig brackets the wheels so the robot starts square to the grid." width="414" height="478" loading="lazy">
+      <figcaption>The alignment jig. Without it, the starting heading varied by
+        more than the effect we were measuring.</figcaption>
     </figure>
     <figure>
       <img src="assets/img/threepi-weighted.webp"
-           alt="A sealed food container labelled 150 g strapped to a printed platform over one side of the robot, offsetting the load to that wheel." width="414" height="319" loading="lazy">
-      <figcaption>The unbalanced payload. 150 g over one wheel, repeated on each
-        side so a turning bias shows up in both directions.</figcaption>
+           alt="A sealed food container labelled 150 g strapped to a printed platform over one side of the robot." width="414" height="319" loading="lazy">
+      <figcaption>150 g over one wheel. We repeated this on each side to test
+        turning bias in both directions.</figcaption>
     </figure>
   </div>
 </div>
 
 <div class="wrap prose">
   <h2>What happened</h2>
-  <p>The escalation helps up to a point. PID roughly halved the open-loop drift,
-    and fusing the two heading sources removed almost all of it. Unweighted, the
-    robot finished within a centimetre or two of the line, run after run.</p>
-  <p>The learned controller didn't beat that. Unweighted it finished about 0.03 m
-    off against 0.01 m, and its runs were much less repeatable. It only came out
-    ahead under load, where 150 g over one wheel put it around 0.05 m off the line
-    against 0.11 m for the fused-heading controller.</p>
+  <p>PID roughly halved the open-loop drift. Fusing the two heading sources removed
+    almost all of it. Unweighted, the robot finished within a centimetre or two of
+    the line on every run.</p>
+  <p>Unweighted, the learned controller finished about 0.03 m off against 0.01 m
+    for fused heading, and its runs were much less repeatable. With 150 g over one
+    wheel it finished around 0.05 m off against 0.11 m.</p>
 </div>
 
 <div class="wrap">
@@ -145,63 +141,56 @@
     <img src="assets/fig/threepi-deviation.svg"
          alt="Measured deviation at the end of each run, by controller and load. Unweighted: open-loop plus 0.60 metres, PID plus 0.32, fused heading minus 0.01, learned controller minus 0.03. With 150 grams on the left: fused heading plus 0.15, learned plus 0.04. With 150 grams on the right: fused heading minus 0.07, learned minus 0.05." width="532" height="288">
     <figcaption>Tape measurements against the track, three runs per condition. The
-      learned controller finished further off the line unweighted, and closer under
-      load. That wasn't the result we expected.</figcaption>
+      learned controller finished further off the line unweighted and closer under
+      load. We had not expected this.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
   <h2>Where the error came from</h2>
-  <p>Comparing what the robot's odometry reported at the end of a run against the
-    tape measurement, the two disagree by up to a quarter of a metre. That gap is
-    the robot's own position error, and odometry is the signal the controller was
-    steering on.</p>
+  <p>At the end of a run, the robot's odometry and the tape measurement disagree by
+    up to a quarter of a metre. That gap is the robot's own position error. The
+    controller was steering on odometry.</p>
 </div>
 
 <div class="wrap">
   <figure class="bleed fig-svg">
     <img src="assets/fig/threepi-drift.svg"
-         alt="Paired bars comparing odometry estimate against tape measurement for the fused-heading and learned controllers under three load conditions. The pairs disagree in every condition, most severely for the learned controller under load, where odometry reports plus 0.29 metres against a measured plus 0.04, and minus 0.21 against a measured minus 0.05." width="532" height="280">
+         alt="Paired bars of odometry estimate and tape measurement for the fused-heading and learned controllers under three load conditions. The pairs disagree in every condition. The largest gaps are for the learned controller under load, with odometry at plus 0.29 metres against a measured plus 0.04, and minus 0.21 against a measured minus 0.05." width="532" height="280">
     <figcaption>The robot's own estimate against the tape measurement at the end
       of each run.</figcaption>
   </figure>
 </div>
 
 <div class="wrap prose">
-  <p>The fusion weights odometry heavily, since the gyro only contributes a small
-    correction term instead of an equal vote, so the fused heading inherits
-    odometry's slow drift. The network was then trained to copy a PI controller
-    running on that same estimate. It learned, correctly, that odometry predicts the
-    expert's output, however it also learned to ignore the disagreement between the
-    two sensors, and that was the one input that could have told it the estimate was
-    going wrong.</p>
-  <p>That's a problem with the training signal rather than with the network.
-    Two changes would be worth trying. Weight the gyro more heavily in the fusion
-    before generating any training data, and train over a distance long enough for
-    the drift to show up in the score. Our runs were about three metres, and that's
-    roughly where the divergence starts.</p>
+  <p>The fusion weights odometry heavily. The gyro only adds a small correction
+    term, so the fused heading inherits odometry's slow drift. The network was
+    trained to copy a PI controller running on that same estimate. It learned that
+    odometry predicts the expert's output. It also learned to ignore the
+    disagreement between the two sensors, which was the one input that could have
+    shown the estimate going wrong.</p>
+  <p>The fault is in the training signal. Two changes are worth trying. Weight the
+    gyro more heavily in the fusion before generating training data. Train over a
+    distance long enough for the drift to show up in the score. Our runs were about
+    three metres, which is roughly where the divergence starts.</p>
 
-  <h2>What I'd take from it</h2>
-  <p>The learned controller was the part of the brief I was most interested in, and
-    it isn't what fixed the problem. Straight-line driving got fixed by noticing
-    that two mediocre heading sources fail in different ways, then combining them.
-    We only saw that because we measured from outside the robot instead of trusting
-    its own odometry.</p>
-  <p>The result went against our hypothesis, and a result like that is only worth much if you can
-    point at a cause. Here the cause is visible in the odometry comparison above,
-    and that's the part of the work I'd stand behind.</p>
+  <h2>Summary</h2>
+  <p>The learned controller was the part of the brief I was most interested in.
+    The fix was combining two heading sources that fail in different ways, which
+    we found by measuring from outside the robot.</p>
+  <p>The result went against our hypothesis. The odometry comparison above shows
+    the cause.</p>
 
   <h2>Credit</h2>
   <p>This was a three-person study for the Robotics Systems unit, with Callum
-    Edwards and Leon Weyrich. I wrote the embedded control stack, which covers the
-    drive loop, the odometry-gyro fusion, the PI expert, calibration and logging. I
-    designed and built the test setup and ran the experiments. The neural policy and
-    its online tuning phase are largely Leon's work, and the analysis and report
-    were shared.</p>
+    Edwards and Leon Weyrich. I wrote the embedded control stack: the drive loop,
+    the odometry-gyro fusion, the PI expert, calibration and logging. I designed and
+    built the test setup and ran the experiments. Leon did most of the neural policy
+    and its online tuning phase. We shared the analysis and report.</p>
   <p>The submitted report is titled around reinforcement learning. The
     implementation is imitation learning from a PI expert, followed by a tuning
-    phase with no exploration, so it isn't estimating a policy gradient. I've used
-    the more accurate description throughout this page, and the
+    phase with no exploration, so it does not estimate a policy gradient. This page
+    uses the more accurate description, and the
     <a href="https://github.com/tgreen-fe/3pi-imitation-control#on-the-word-reinforcement">repository
     explains the difference</a> against the code.</p>
 
@@ -213,7 +202,7 @@
 
 <footer class="site-foot">
   <div class="wrap">
-    <span>Thomas Green &middot; London, UK</span>
+    <span>Thomas Green &middot; London, UK &middot; Vancouver from January 2027</span>
     <span class="set">
       <a href="mailto:tbbgreen@gmail.com">Email</a>
       <a href="https://github.com/tgreen-fe">GitHub</a>

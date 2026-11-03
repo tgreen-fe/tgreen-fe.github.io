@@ -6,7 +6,7 @@ combination is a stock PowerPoint shape style, so the result reads as a slide
 rather than as a hand-drawn figure.
 """
 import os
-OUT = "/home/claude/site/assets/fig"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "fig")
 os.makedirs(OUT, exist_ok=True)
 
 SLIDE = "#fcfcfb"      # matches the figure panels on the pink page
@@ -249,5 +249,71 @@ def prediction():
         svg(W, H, b, "Race outcome prediction pipeline"))
 
 
-vine(); vla(); lapsim(); prediction()
-print("wrote 4 diagrams")
+
+
+
+# =========================================================== 5. card graphics
+def card(fname, title, steps, foot):
+    """16:9 homepage card: three blocks left to right and a one-line note."""
+    W, H = 900, 506
+    b = ""
+    x, w, gap = 40, 240, 50
+    for i, (label, sub, tone) in enumerate(steps):
+        b += shape(x, 168, w, 132, label, sub=sub, tone=tone, size=22)
+        if i < len(steps) - 1:
+            b += conn(x + w + 6, 234, x + w + gap - 6, 234, w=2.2)
+        x += w + gap
+    b += txt(W / 2, 372, foot, size=19, col=TXT2)
+    open(f"{OUT}/{fname}", "w").write(svg(W, H, b, title))
+
+
+def cards():
+    card("lapsim-card.svg", "Circuit geometry to lap simulation to design read-out",
+         [("Circuit|geometry", "from city maps", "pale"),
+          ("Lap|simulation", "Gen3 powertrain", "blue"),
+          ("Design|read-out", "lap time, energy, overtaking", "green")],
+         "Weeks of manual analysis down to about a day")
+    card("prediction-card.svg", "Live race state to features to win probability",
+         [("Live race|state", "timing and telemetry", "pale"),
+          ("Engineered|features", "battery, position, priors", "orange"),
+          ("Win|probability", "on the world feed", "green")],
+         "63% correct at 60% race distance")
+
+
+# ======================================================== 6. smart notebook
+def notebook():
+    W, H = 900, 452
+    b = ""
+    b += shape(20, 186, 130, 80, "Pen on|paper", tone="grey", size=15)
+    # track 1
+    b += txt(190, 42, "Track 1: phone microphone", anchor="start", size=13,
+             col=PAL["blue"]["sx"], weight="600")
+    b += shape(190, 54, 170, 72, "Phone mic|and IMU", sub="48 kHz audio", tone="pale")
+    b += shape(395, 54, 170, 72, "CNN + BiGRU", sub="CTC, lexicon decoder", tone="blue")
+    # track 2
+    b += txt(190, 310, "Track 2: piezo array (in progress)", anchor="start", size=13,
+             col=PAL["orange"]["sx"], weight="600")
+    b += shape(190, 322, 170, 72, "16 piezo discs", sub="under the page", tone="pale")
+    b += shape(395, 322, 170, 72, "Amplifier PCB|and Teensy 4.1", sub="100 kHz per channel", tone="orange")
+    b += txt(480, 418, "time difference of arrival gives pen position", size=12, col=TXT2)
+    # merge
+    b += shape(605, 186, 130, 80, "Text and|position", tone="pale", size=15)
+    b += shape(770, 186, 110, 80, "E-paper|cover", sub="Pico W", tone="green", size=15)
+    for y_from, y_to in ((214, 90), (240, 358)):
+        b += (f'<path d="M150,{y_from} L168,{y_from} L168,{y_to} L184,{y_to}" '
+              f'stroke="{LINE}" stroke-width="1.5" fill="none" '
+              f'marker-end="url(#ah)" stroke-linejoin="round"/>')
+    b += conn(360, 90, 389, 90, w=1.6)
+    b += conn(360, 358, 389, 358, w=1.6)
+    b += elbow(565, 90, 670, 180, r=8)
+    b += elbow(565, 358, 670, 272, r=8)
+    b += conn(735, 226, 764, 226, w=1.6)
+    b += txt(752, 154, "LLM summary,", size=12, col=TXT2)
+    b += txt(752, 170, "1-bit render", size=12, col=TXT2)
+    open(f"{OUT}/notebook-system.svg", "w").write(
+        svg(W, H, b, "Smart notebook system: two capture tracks feeding text and pen position to the e-paper cover"))
+
+
+if __name__ == "__main__":
+    vine(); vla(); lapsim(); prediction(); cards(); notebook()
+    print("wrote 7 diagrams")
